@@ -1,5 +1,5 @@
 /* ============================================================
-   HUBTOWN NIGERIA — Interactive Map Landing Page
+   KNOW.COM NIGERIA — Interactive Map Landing Page
    ============================================================ */
 
 :root {
@@ -11,8 +11,8 @@
   --gold-soft: rgba(201, 169, 106, 0.35);
   --line: rgba(201, 169, 106, 0.22);
   --green: #6fbf8f;
-  --font-display: "Marcellus", serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  --font-display: "Satoshi", system-ui, sans-serif;
+  --font-body: "Satoshi", system-ui, sans-serif;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -54,6 +54,7 @@ body::before {
 .preloader-inner { text-align: center; }
 .preloader-logo {
   font-family: var(--font-display);
+  font-weight: 700;
   font-size: clamp(2rem, 5vw, 3.2rem);
   letter-spacing: 0.35em;
   color: var(--gold);
@@ -94,6 +95,7 @@ body::before {
 }
 .brand-text {
   font-family: var(--font-display);
+  font-weight: 700;
   font-size: 1.05rem;
   letter-spacing: 0.28em;
   color: var(--ink);
@@ -187,7 +189,7 @@ body::before {
 /* ---- left rail ---- */
 .rail-kicker {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 500;
   font-size: 1.35rem;
   line-height: 1.35;
   letter-spacing: 0.04em;
@@ -435,7 +437,7 @@ body::before {
 .card-title {
   margin-top: 1rem;
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 500;
   font-size: 1.7rem;
   line-height: 1.2;
 }
@@ -550,7 +552,7 @@ body::before {
 .detail-title {
   margin-top: 1.1rem;
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 500;
   font-size: clamp(1.8rem, 4vw, 2.6rem);
   line-height: 1.15;
 }

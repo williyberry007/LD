@@ -1,4 +1,4 @@
-# Hubtown Nigeria — Interactive Map Landing Page
+# Know.com Nigeria — Interactive Map Landing Page
 
 A dark, immersive landing page for a real estate developer, built around an
 interactive map of Nigeria. Inspired by the map-explorer experience at

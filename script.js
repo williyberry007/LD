@@ -1,5 +1,5 @@
 /* ============================================================
-   HUBTOWN NIGERIA — map explorer interactions
+   KNOW.COM NIGERIA — map explorer interactions
    ============================================================ */
 
 // Marker x/y are percentages of the map artwork (SVG viewBox 0 0 800 680),
@@ -88,7 +88,7 @@ function selectProject(globalIndex) {
   $("cardIndex").textContent = String(Math.max(1, pool.indexOf(p) + 1)).padStart(2, "0");
   $("cardTotal").textContent = String(pool.length || REGION_COUNTS[activeRegion]).padStart(2, "0");
   $("cardTitle").textContent = p.name;
-  $("cardLoc").textContent = "HUB–DISTRICT · " + p.city.toUpperCase();
+  $("cardLoc").textContent = "KNOW–DISTRICT · " + p.city.toUpperCase();
   $("cardType").textContent = p.type;
   $("cardYear").textContent = p.year;
   $("cardUnits").textContent = p.units;
@@ -282,7 +282,7 @@ const detail = $("detail");
 function openDetail() {
   const p = PROJECTS[activeIndex];
   $("detailTitle").textContent = p.name;
-  $("detailLoc").textContent = "HUB–DISTRICT · " + p.city.toUpperCase();
+  $("detailLoc").textContent = "KNOW–DISTRICT · " + p.city.toUpperCase();
   $("detailDesc").textContent = p.desc;
   $("detailType").textContent = p.type;
   $("detailYear").textContent = p.year;
