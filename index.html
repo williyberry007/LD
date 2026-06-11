@@ -236,6 +236,48 @@
     </aside>
   </main>
 
+  <!-- ============ PROJECT DETAIL OVERLAY ============ -->
+  <div class="detail" id="detail" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <button class="detail-close" id="detailClose" aria-label="Close project details">&times;</button>
+    <div class="detail-inner">
+      <div class="detail-art" id="detailArt" aria-hidden="true">
+        <svg viewBox="0 0 200 260" preserveAspectRatio="xMidYMax meet">
+          <g class="skyline" stroke="rgba(201,169,106,0.7)" stroke-width="1.2" fill="rgba(22,32,27,0.9)">
+            <rect x="20"  y="120" width="34" height="140" />
+            <rect x="62"  y="70"  width="40" height="190" />
+            <rect x="110" y="100" width="30" height="160" />
+            <rect x="148" y="140" width="34" height="120" />
+            <path d="M62 70 82 48 102 70" />
+          </g>
+          <g class="skyline-windows" fill="rgba(201,169,106,0.5)"></g>
+        </svg>
+      </div>
+      <div class="detail-copy">
+        <div class="detail-status" id="detailStatus">Now Selling</div>
+        <h2 class="detail-title" id="detailTitle">Eko Crest Towers</h2>
+        <p class="detail-loc" id="detailLoc">HUB&ndash;DISTRICT &middot; VICTORIA ISLAND, LAGOS</p>
+        <p class="detail-desc" id="detailDesc"></p>
+        <dl class="detail-meta">
+          <div><dt>Type</dt><dd id="detailType"></dd></div>
+          <div><dt>Year</dt><dd id="detailYear"></dd></div>
+          <div><dt>Units</dt><dd id="detailUnits"></dd></div>
+          <div><dt>Coordinates</dt><dd id="detailCoords"></dd></div>
+        </dl>
+        <form class="detail-form" id="enquiryForm">
+          <span class="detail-form-label">Register your interest</span>
+          <div class="detail-form-row">
+            <input type="text" name="name" placeholder="Full name" required />
+            <input type="email" name="email" placeholder="Email address" required />
+          </div>
+          <button type="submit" class="card-cta">Request Brochure
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </button>
+          <p class="detail-form-done" id="enquiryDone" hidden>Thank you &mdash; our sales team will contact you shortly.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- ============ BOTTOM BAR ============ -->
   <footer class="bottombar">
     <button class="sound-toggle" id="soundToggle" aria-pressed="false">

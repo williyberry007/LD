@@ -114,6 +114,7 @@ function step(dir) {
 $("prevBtn").addEventListener("click", () => step(-1));
 $("nextBtn").addEventListener("click", () => step(1));
 document.addEventListener("keydown", (e) => {
+  if ($("detail").classList.contains("is-open")) return;
   if (e.key === "ArrowRight") step(1);
   if (e.key === "ArrowLeft") step(-1);
 });
@@ -251,6 +252,73 @@ function playTick() {
   osc.start();
   osc.stop(audioCtx.currentTime + 0.13);
 }
+
+// ---------- project detail overlay ----------
+const detail = $("detail");
+
+// scatter lit windows over the skyline silhouette
+(function buildWindows() {
+  const host = document.querySelector(".skyline-windows");
+  const towers = [
+    { x: 20, y: 120, w: 34, h: 140 },
+    { x: 62, y: 70, w: 40, h: 190 },
+    { x: 110, y: 100, w: 30, h: 160 },
+    { x: 148, y: 140, w: 34, h: 120 },
+  ];
+  towers.forEach((t) => {
+    for (let wy = t.y + 8; wy < t.y + t.h - 8; wy += 12) {
+      for (let wx = t.x + 5; wx < t.x + t.w - 6; wx += 9) {
+        if (Math.random() < 0.45) continue;
+        const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        r.setAttribute("x", wx); r.setAttribute("y", wy);
+        r.setAttribute("width", 4); r.setAttribute("height", 5);
+        r.setAttribute("opacity", (0.2 + Math.random() * 0.6).toFixed(2));
+        host.appendChild(r);
+      }
+    }
+  });
+})();
+
+function openDetail() {
+  const p = PROJECTS[activeIndex];
+  $("detailTitle").textContent = p.name;
+  $("detailLoc").textContent = "HUB–DISTRICT · " + p.city.toUpperCase();
+  $("detailDesc").textContent = p.desc;
+  $("detailType").textContent = p.type;
+  $("detailYear").textContent = p.year;
+  $("detailUnits").textContent = p.units;
+  const lon = 2.5 + (p.x / 100) * 800 / 57;
+  const lat = 14.2 - (p.y / 100) * 680 / 57;
+  $("detailCoords").textContent = `${lat.toFixed(2)}° N, ${lon.toFixed(2)}° E`;
+  const status = $("detailStatus");
+  status.textContent = p.status;
+  status.dataset.tone = p.status === "Sold Out" ? "sold" : p.status === "Under Construction" ? "construction" : "selling";
+  $("enquiryDone").hidden = true;
+  $("enquiryForm").reset();
+  detail.classList.add("is-open");
+  detail.setAttribute("aria-hidden", "false");
+  $("detailClose").focus();
+  playTick();
+}
+
+function closeDetail() {
+  detail.classList.remove("is-open");
+  detail.setAttribute("aria-hidden", "true");
+}
+
+$("cardCta").addEventListener("click", (e) => { e.preventDefault(); openDetail(); });
+$("detailClose").addEventListener("click", closeDetail);
+detail.addEventListener("click", (e) => { if (e.target === detail) closeDetail(); });
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && detail.classList.contains("is-open")) closeDetail();
+});
+
+$("enquiryForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  $("enquiryDone").hidden = false;
+  e.target.reset();
+  playTick();
+});
 
 // ---------- menu ----------
 $("menuBtn").addEventListener("click", () => {
