@@ -111,6 +111,14 @@ appointment type, a preferred date and time, then leave their details.
 - **Email notifications** go to the address in **Customize → Appointment
   Booking → Send Bookings To** (defaults to `info@alarede.com`). The booking
   is also saved in the dashboard even if email delivery fails.
+- **Time slots & capacity**: define the bookable times (one per line) and how
+  many bookings each date + slot accepts in **Customize → Appointment
+  Booking**. When a visitor picks a date the form loads that day's slots and
+  greys out any that are fully booked; the limit is also enforced server-side
+  so a slot can never be overbooked. Leave the slots box empty to use a free
+  time picker, or set capacity to 0 for unlimited.
+- **Customer confirmation**: an auto-reply email is sent to the person who
+  booked (toggle, subject and message editable in the Customizer).
 - **Spam protection**: a hidden honeypot field plus an optional **Google
   reCAPTCHA v2**. Paste your Site and Secret keys in **Customize → Appointment
   Booking** to enable it; without keys, the honeypot + nonce still apply.

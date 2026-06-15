@@ -84,6 +84,96 @@ function alarede_seed_appointment_types() {
 add_action( 'after_switch_theme', 'alarede_seed_appointment_types' );
 
 /**
+ * Get the configured time slots as an array (one per line in the Customizer).
+ *
+ * @return array Empty when none configured (form then uses a free time input).
+ */
+function alarede_booking_slots() {
+	$raw = get_theme_mod( 'alarede_booking_slots', "10:00\n11:00\n12:00\n14:00\n15:00\n16:00" );
+	$slots = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $raw ) ) );
+	return array_values( $slots );
+}
+
+/**
+ * Count active (non-cancelled) bookings for a given date and slot.
+ *
+ * @param string $date Date (Y-m-d).
+ * @param string $slot Time slot.
+ * @return int
+ */
+function alarede_slot_booked_count( $date, $slot ) {
+	if ( ! $date ) {
+		return 0;
+	}
+	$meta = array(
+		'relation' => 'AND',
+		array( 'key' => '_ae_booking_date', 'value' => $date ),
+		array( 'key' => '_ae_booking_status', 'value' => 'cancelled', 'compare' => '!=' ),
+	);
+	if ( '' !== $slot ) {
+		$meta[] = array( 'key' => '_ae_booking_time', 'value' => $slot );
+	}
+	$query = new WP_Query(
+		array(
+			'post_type'              => 'ae_booking',
+			'post_status'            => 'publish',
+			'posts_per_page'         => -1,
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+			'meta_query'             => $meta, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+		)
+	);
+	return (int) $query->post_count;
+}
+
+/**
+ * Availability for each slot on a given date.
+ *
+ * @param string $date Date (Y-m-d).
+ * @return array List of [ 'time' => slot, 'full' => bool ].
+ */
+function alarede_available_slots( $date ) {
+	$capacity = (int) get_theme_mod( 'alarede_booking_capacity', 1 );
+	$out      = array();
+	foreach ( alarede_booking_slots() as $slot ) {
+		$full  = ( $capacity > 0 ) && ( alarede_slot_booked_count( $date, $slot ) >= $capacity );
+		$out[] = array( 'time' => $slot, 'full' => $full );
+	}
+	return $out;
+}
+
+/**
+ * AJAX: return slot availability for a chosen date (public, read-only).
+ */
+function alarede_ajax_slots() {
+	$date = isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) ) {
+		wp_send_json_error();
+	}
+	wp_send_json_success( alarede_available_slots( $date ) );
+}
+add_action( 'wp_ajax_alarede_slots', 'alarede_ajax_slots' );
+add_action( 'wp_ajax_nopriv_alarede_slots', 'alarede_ajax_slots' );
+
+/**
+ * Pass the AJAX URL and labels to the front-end script.
+ */
+function alarede_booking_localize() {
+	wp_localize_script(
+		'alarede-main',
+		'alaredeBooking',
+		array(
+			'ajax' => admin_url( 'admin-ajax.php' ),
+			'full' => __( 'fully booked', 'alarede' ),
+			'pick' => __( 'Select a time…', 'alarede' ),
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'alarede_booking_localize', 20 );
+
+/**
  * Admin columns for the Bookings list table.
  *
  * @param array $cols Columns.
@@ -285,6 +375,18 @@ function alarede_handle_booking() {
 		$fail( 'error' );
 	}
 
+	// Time-slot validation + capacity check (when slots are configured).
+	$slots = alarede_booking_slots();
+	if ( $slots ) {
+		if ( ! $time || ! in_array( $time, $slots, true ) ) {
+			$fail( 'error' );
+		}
+		$capacity = (int) get_theme_mod( 'alarede_booking_capacity', 1 );
+		if ( $capacity > 0 && alarede_slot_booked_count( $date, $time ) >= $capacity ) {
+			$fail( 'full' );
+		}
+	}
+
 	$type_term = $type_id ? get_term( $type_id, 'ae_appt_type' ) : null;
 	$type_name = ( $type_term && ! is_wp_error( $type_term ) ) ? $type_term->name : __( 'Appointment', 'alarede' );
 
@@ -345,6 +447,35 @@ function alarede_handle_booking() {
 	);
 	wp_mail( $to, $subject, implode( "\n", $lines ), $headers );
 
+	// Confirmation auto-reply to the customer.
+	if ( get_theme_mod( 'alarede_booking_confirm_enable', true ) ) {
+		$site         = get_bloginfo( 'name' );
+		$conf_subject = get_theme_mod( 'alarede_booking_confirm_subject', '' );
+		if ( ! $conf_subject ) {
+			/* translators: %s: site name. */
+			$conf_subject = sprintf( __( 'Your appointment request — %s', 'alarede' ), $site );
+		}
+		$conf_intro = get_theme_mod( 'alarede_booking_confirm_message', __( 'Thank you for your request. We have received the following details and will confirm your appointment by email shortly.', 'alarede' ) );
+		$conf_lines = array(
+			sprintf( __( 'Dear %s,', 'alarede' ), $name ),
+			'',
+			$conf_intro,
+			'',
+			sprintf( '%s: %s', __( 'Type', 'alarede' ), $type_name ),
+			sprintf( '%s: %s', __( 'Date', 'alarede' ), $date ),
+			sprintf( '%s: %s', __( 'Time', 'alarede' ), $time ),
+			'',
+			sprintf( __( 'Warm regards,', 'alarede' ) ),
+			$site,
+		);
+		$from         = is_email( $to ) ? $to : get_option( 'admin_email' );
+		$conf_headers = array(
+			'Content-Type: text/plain; charset=UTF-8',
+			sprintf( 'Reply-To: %s <%s>', $site, $from ),
+		);
+		wp_mail( $email, $conf_subject, implode( "\n", $conf_lines ), $conf_headers );
+	}
+
 	wp_safe_redirect( add_query_arg( 'ae_booking', 'success', $redirect ) . '#contact' );
 	exit;
 }
@@ -384,6 +515,8 @@ function alarede_booking_form() {
 		$notice = '<div class="ae-form-notice ae-form-notice--ok">' . esc_html( $msg ) . '</div>';
 	} elseif ( 'captcha' === $ae_status ) {
 		$notice = '<div class="ae-form-notice ae-form-notice--err">' . esc_html__( 'Please complete the reCAPTCHA and try again.', 'alarede' ) . '</div>';
+	} elseif ( 'full' === $ae_status ) {
+		$notice = '<div class="ae-form-notice ae-form-notice--err">' . esc_html__( 'Sorry, that time slot is fully booked. Please choose another date or time.', 'alarede' ) . '</div>';
 	} elseif ( $ae_status && 'spam' !== $ae_status ) {
 		$notice = '<div class="ae-form-notice ae-form-notice--err">' . esc_html__( 'Sorry, something went wrong. Please check your details and try again.', 'alarede' ) . '</div>';
 	}
@@ -420,7 +553,17 @@ function alarede_booking_form() {
 			</label>
 			<label class="ae-field">
 				<span><?php esc_html_e( 'Preferred Time', 'alarede' ); ?></span>
-				<input type="time" name="ae_time">
+				<?php $slots = alarede_booking_slots(); ?>
+				<?php if ( $slots ) : ?>
+					<select name="ae_time" data-slots="1">
+						<option value="" disabled selected><?php esc_html_e( 'Choose a date first…', 'alarede' ); ?></option>
+						<?php foreach ( $slots as $slot ) : ?>
+							<option value="<?php echo esc_attr( $slot ); ?>" data-slot="1"><?php echo esc_html( $slot ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				<?php else : ?>
+					<input type="time" name="ae_time">
+				<?php endif; ?>
 			</label>
 		</div>
 

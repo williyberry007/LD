@@ -17,7 +17,54 @@
 		setupSmoothScroll();
 		setupFaq();
 		setupGalleryFilter();
+		setupBookingSlots();
 	} );
+
+	/* Booking form: load available time slots when a date is chosen. */
+	function setupBookingSlots() {
+		var form = document.querySelector( '.ae-booking-form' );
+		if ( ! form || typeof window.alaredeBooking === 'undefined' ) {
+			return;
+		}
+		var dateInput = form.querySelector( 'input[name="ae_date"]' );
+		var timeSel   = form.querySelector( 'select[name="ae_time"][data-slots]' );
+		if ( ! dateInput || ! timeSel ) {
+			return;
+		}
+
+		dateInput.addEventListener( 'change', function () {
+			if ( ! dateInput.value ) {
+				return;
+			}
+			var body = new FormData();
+			body.append( 'action', 'alarede_slots' );
+			body.append( 'date', dateInput.value );
+
+			fetch( window.alaredeBooking.ajax, { method: 'POST', body: body } )
+				.then( function ( r ) { return r.json(); } )
+				.then( function ( res ) {
+					if ( ! res || ! res.success ) {
+						return;
+					}
+					var previous = timeSel.value;
+					// Remove existing slot options, keep the first placeholder.
+					[].slice.call( timeSel.querySelectorAll( 'option[data-slot]' ) ).forEach( function ( o ) { o.remove(); } );
+					timeSel.options[ 0 ].textContent = window.alaredeBooking.pick;
+					res.data.forEach( function ( slot ) {
+						var opt = document.createElement( 'option' );
+						opt.value = slot.time;
+						opt.setAttribute( 'data-slot', '1' );
+						opt.textContent = slot.full ? slot.time + ' — ' + window.alaredeBooking.full : slot.time;
+						opt.disabled = !! slot.full;
+						if ( slot.time === previous && ! slot.full ) {
+							opt.selected = true;
+						}
+						timeSel.appendChild( opt );
+					} );
+				} )
+				.catch( function () {} );
+		} );
+	}
 
 	/* Ensure self-hosted hero videos autoplay (force muted + play). */
 	function setupHeroVideo() {

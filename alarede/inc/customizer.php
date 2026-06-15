@@ -240,6 +240,18 @@ function alarede_customize_register( $wp_customize ) {
 	);
 	$add_text( 'alarede_booking_email', __( 'Send Bookings To (email)', 'alarede' ), 'info@alarede.com', 'alarede_booking' );
 	$add_text( 'alarede_booking_success', __( 'Success Message', 'alarede' ), __( 'Thank you! Your appointment request has been received — we will confirm by email shortly.', 'alarede' ), 'alarede_booking', 'textarea' );
+
+	// Time slots + capacity.
+	$add_text( 'alarede_booking_slots', __( 'Time Slots (one per line)', 'alarede' ), "10:00\n11:00\n12:00\n14:00\n15:00\n16:00", 'alarede_booking', 'textarea' );
+	$wp_customize->add_setting( 'alarede_booking_capacity', array( 'default' => 1, 'sanitize_callback' => 'absint' ) );
+	$wp_customize->add_control( 'alarede_booking_capacity', array( 'label' => __( 'Bookings allowed per slot', 'alarede' ), 'description' => __( 'How many bookings each date + time slot can take before it shows as fully booked. Set 0 for unlimited.', 'alarede' ), 'section' => 'alarede_booking', 'type' => 'number', 'input_attrs' => array( 'min' => 0 ) ) );
+
+	// Customer confirmation auto-reply.
+	$add_toggle( 'alarede_booking_confirm_enable', __( 'Send confirmation email to the customer', 'alarede' ), 'alarede_booking' );
+	$add_text( 'alarede_booking_confirm_subject', __( 'Confirmation Email Subject', 'alarede' ), '', 'alarede_booking' );
+	$add_text( 'alarede_booking_confirm_message', __( 'Confirmation Email Message', 'alarede' ), __( 'Thank you for your request. We have received the following details and will confirm your appointment by email shortly.', 'alarede' ), 'alarede_booking', 'textarea' );
+
+	// Spam protection.
 	$add_text( 'alarede_recaptcha_site', __( 'reCAPTCHA v2 Site Key', 'alarede' ), '', 'alarede_booking' );
 	$add_text( 'alarede_recaptcha_secret', __( 'reCAPTCHA v2 Secret Key', 'alarede' ), '', 'alarede_booking' );
 
