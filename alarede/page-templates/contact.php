@@ -29,7 +29,7 @@ while ( have_posts() ) :
 		</div>
 	</div>
 
-	<section class="ae-section">
+	<section class="ae-section" id="contact">
 		<div class="ae-container">
 			<?php if ( trim( get_the_content() ) ) : ?>
 				<div class="entry-content" style="text-align:center;max-width:760px;margin:0 auto 3rem;"><?php the_content(); ?></div>
@@ -54,15 +54,7 @@ while ( have_posts() ) :
 					if ( $shortcode ) {
 						echo do_shortcode( $shortcode );
 					} else {
-						?>
-						<form action="mailto:<?php echo esc_attr( $email ); ?>" method="post" enctype="text/plain">
-							<input type="text" name="name" placeholder="<?php esc_attr_e( 'Your name', 'alarede' ); ?>" required>
-							<input type="email" name="email" placeholder="<?php esc_attr_e( 'Email address', 'alarede' ); ?>" required>
-							<input type="text" name="subject" placeholder="<?php esc_attr_e( 'Subject', 'alarede' ); ?>">
-							<textarea name="message" placeholder="<?php esc_attr_e( 'How can we help?', 'alarede' ); ?>" required></textarea>
-							<button type="submit" class="ae-btn ae-btn--solid"><?php esc_html_e( 'Send Message', 'alarede' ); ?></button>
-						</form>
-						<?php
+						echo alarede_booking_form(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped internally.
 					}
 					?>
 				</div>

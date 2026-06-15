@@ -97,6 +97,25 @@ editable there too.
   and `/portfolio/`.
 - **Testimonials** — quotes (with names + venue) for the slider.
 
+## Appointment booking
+
+The contact form is an **appointment booking form**: visitors pick an
+appointment type, a preferred date and time, then leave their details.
+
+- **Add/edit the options** under **Bookings → Appointment Types** (a few are
+  created on activation: Initial Consultation, Wedding Planning, Event
+  Planning, Venue Visit, Academy Enrolment).
+- **See every submission** under **Bookings** — each row shows the type, date,
+  time, email, phone and status (New / Confirmed / Completed / Cancelled,
+  editable on each booking).
+- **Email notifications** go to the address in **Customize → Appointment
+  Booking → Send Bookings To** (defaults to `info@alarede.com`). The booking
+  is also saved in the dashboard even if email delivery fails.
+- **Spam protection**: a hidden honeypot field plus an optional **Google
+  reCAPTCHA v2**. Paste your Site and Secret keys in **Customize → Appointment
+  Booking** to enable it; without keys, the honeypot + nonce still apply.
+- Place the form anywhere with the `[alarede_booking_form]` shortcode.
+
 ## Contact form & map
 
 The built-in form uses a `mailto:` action for zero-config use. For production,

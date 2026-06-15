@@ -163,6 +163,7 @@ add_filter( 'body_class', 'alarede_body_classes' );
 
 require get_template_directory() . '/inc/template-tags.php';
 require get_template_directory() . '/inc/custom-post-types.php';
+require get_template_directory() . '/inc/booking.php';
 require get_template_directory() . '/inc/customizer.php';
 
 /**

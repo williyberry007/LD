@@ -223,9 +223,25 @@ function alarede_customize_register( $wp_customize ) {
 	$add_text( 'alarede_contact_phone', __( 'Phone', 'alarede' ), '+34 000 000 000', 'alarede_contact' );
 	$add_text( 'alarede_contact_address', __( 'Address', 'alarede' ), __( 'Palma de Mallorca, Spain', 'alarede' ), 'alarede_contact', 'textarea' );
 	$wp_customize->add_setting( 'alarede_contact_shortcode', array( 'default' => '', 'sanitize_callback' => 'wp_kses_post' ) );
-	$wp_customize->add_control( 'alarede_contact_shortcode', array( 'label' => __( 'Contact Form Shortcode (optional)', 'alarede' ), 'description' => __( 'Paste a form shortcode (e.g. Contact Form 7). Leave blank to use the built-in mailto form.', 'alarede' ), 'section' => 'alarede_contact', 'type' => 'textarea' ) );
+	$wp_customize->add_control( 'alarede_contact_shortcode', array( 'label' => __( 'Contact Form Shortcode (optional)', 'alarede' ), 'description' => __( 'Paste a form shortcode to override the built-in appointment booking form. Leave blank to use the booking form.', 'alarede' ), 'section' => 'alarede_contact', 'type' => 'textarea' ) );
 	$wp_customize->add_setting( 'alarede_contact_map', array( 'default' => '', 'sanitize_callback' => 'alarede_sanitize_embed' ) );
 	$wp_customize->add_control( 'alarede_contact_map', array( 'label' => __( 'Map Embed (optional)', 'alarede' ), 'description' => __( 'Paste a Google Maps embed <iframe> to show a map on the Contact page template.', 'alarede' ), 'section' => 'alarede_contact', 'type' => 'textarea' ) );
+
+	/* ===============================================================
+	 * BOOKING & reCAPTCHA
+	 * =============================================================== */
+	$wp_customize->add_section(
+		'alarede_booking',
+		array(
+			'title'       => __( 'Appointment Booking', 'alarede' ),
+			'priority'    => 26,
+			'description' => __( 'The contact form is an appointment booking form. Add or edit the options under Bookings → Appointment Types in the dashboard, and see all submissions under Bookings.', 'alarede' ),
+		)
+	);
+	$add_text( 'alarede_booking_email', __( 'Send Bookings To (email)', 'alarede' ), 'info@alarede.com', 'alarede_booking' );
+	$add_text( 'alarede_booking_success', __( 'Success Message', 'alarede' ), __( 'Thank you! Your appointment request has been received — we will confirm by email shortly.', 'alarede' ), 'alarede_booking', 'textarea' );
+	$add_text( 'alarede_recaptcha_site', __( 'reCAPTCHA v2 Site Key', 'alarede' ), '', 'alarede_booking' );
+	$add_text( 'alarede_recaptcha_secret', __( 'reCAPTCHA v2 Secret Key', 'alarede' ), '', 'alarede_booking' );
 
 	/* ===============================================================
 	 * PAGE TEMPLATES (editable lists)

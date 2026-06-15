@@ -36,19 +36,7 @@ $shortcode = get_theme_mod( 'alarede_contact_shortcode', '' );
 				if ( $shortcode ) {
 					echo do_shortcode( $shortcode );
 				} else {
-					$subject = rawurlencode( __( 'Event enquiry', 'alarede' ) );
-					?>
-					<form action="mailto:<?php echo esc_attr( $email ); ?>" method="post" enctype="text/plain">
-						<input type="text" name="name" placeholder="<?php esc_attr_e( 'Your name', 'alarede' ); ?>" required>
-						<input type="email" name="email" placeholder="<?php esc_attr_e( 'Email address', 'alarede' ); ?>" required>
-						<input type="text" name="date" placeholder="<?php esc_attr_e( 'Approximate event date', 'alarede' ); ?>">
-						<textarea name="message" placeholder="<?php esc_attr_e( 'Tell us about your celebration…', 'alarede' ); ?>" required></textarea>
-						<button type="submit" class="ae-btn ae-btn--solid"><?php esc_html_e( 'Send Enquiry', 'alarede' ); ?></button>
-					</form>
-					<p style="font-size:.8rem;color:var(--ae-color-muted);margin-top:1rem;">
-						<?php esc_html_e( 'Tip: install a form plugin (e.g. Contact Form 7) and paste its shortcode in the Customizer for a fully featured form.', 'alarede' ); ?>
-					</p>
-					<?php
+					echo alarede_booking_form(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped internally.
 				}
 				?>
 			</div>
