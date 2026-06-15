@@ -319,6 +319,10 @@ function alarede_customize_register( $wp_customize ) {
 	 * SOCIAL & FOOTER
 	 * =============================================================== */
 	$wp_customize->add_section( 'alarede_social', array( 'title' => __( 'Social & Footer', 'alarede' ), 'priority' => 32 ) );
+	$add_toggle( 'alarede_footer_tagline_enable', __( 'Show footer tagline band', 'alarede' ), 'alarede_social' );
+	$add_text( 'alarede_footer_tagline_kicker', __( 'Footer Tagline — Overline', 'alarede' ), __( 'For Those Who Desire the Finest', 'alarede' ), 'alarede_social' );
+	$add_text( 'alarede_footer_tagline_title', __( 'Footer Tagline — Heading', 'alarede' ), __( 'Exclusive Luxury Wedding Experiences', 'alarede' ), 'alarede_social' );
+	$add_text( 'alarede_footer_about', __( 'Footer About Text', 'alarede' ), __( 'An elegant studio crafting bespoke luxury weddings and events — blending timeless design, exclusivity and personal care into truly extraordinary celebrations.', 'alarede' ), 'alarede_social', 'textarea' );
 	$add_text( 'alarede_social_instagram', __( 'Instagram URL', 'alarede' ), '', 'alarede_social', 'url' );
 	$add_text( 'alarede_social_facebook', __( 'Facebook URL', 'alarede' ), '', 'alarede_social', 'url' );
 	$add_text( 'alarede_social_pinterest', __( 'Pinterest URL', 'alarede' ), '', 'alarede_social', 'url' );

@@ -42,8 +42,9 @@ function alarede_setup() {
 
 	register_nav_menus(
 		array(
-			'primary' => __( 'Primary Menu', 'alarede' ),
-			'footer'  => __( 'Footer Menu', 'alarede' ),
+			'primary'       => __( 'Primary Menu', 'alarede' ),
+			'footer'        => __( 'Footer Services Menu', 'alarede' ),
+			'footer_policy' => __( 'Footer Policy Menu', 'alarede' ),
 		)
 	);
 
