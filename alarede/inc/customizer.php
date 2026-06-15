@@ -155,6 +155,18 @@ function alarede_customize_register( $wp_customize ) {
 	$add_text( 'alarede_intro_signature', __( 'Signature / Name', 'alarede' ), __( 'The Events Team', 'alarede' ), 'alarede_intro' );
 
 	/* ===============================================================
+	 * 2b. FEATURE BAND (image + overlapping card)
+	 * =============================================================== */
+	$wp_customize->add_section( 'alarede_feature', array( 'title' => __( 'Feature Band', 'alarede' ), 'panel' => 'alarede_front_page' ) );
+	$add_toggle( 'alarede_feature_enable', __( 'Show this section', 'alarede' ), 'alarede_feature' );
+	$add_image( 'alarede_feature_image', __( 'Image', 'alarede' ), 'alarede_feature' );
+	$add_text( 'alarede_feature_kicker', __( 'Overline Text (optional)', 'alarede' ), '', 'alarede_feature' );
+	$add_text( 'alarede_feature_title', __( 'Title', 'alarede' ), __( 'Luxury Wedding Planner in Mallorca', 'alarede' ), 'alarede_feature' );
+	$add_text( 'alarede_feature_text', __( 'Body Text', 'alarede' ), __( "We don't just plan weddings; we curate unparalleled experiences. Imagine your dream day unfolding against breathtaking backdrops, meticulously designed and flawlessly executed.\n\nFrom exclusive venues to bespoke culinary journeys, we transform your vision into an unforgettable celebration — so you can simply savour every precious moment.", 'alarede' ), 'alarede_feature', 'textarea' );
+	$add_text( 'alarede_feature_btn_text', __( 'Button Text', 'alarede' ), __( 'Book a Consultation', 'alarede' ), 'alarede_feature' );
+	$add_text( 'alarede_feature_btn_url', __( 'Button URL', 'alarede' ), '#contact', 'alarede_feature', 'url' );
+
+	/* ===============================================================
 	 * 3. SERVICES
 	 * =============================================================== */
 	$wp_customize->add_section( 'alarede_services', array( 'title' => __( 'Services', 'alarede' ), 'panel' => 'alarede_front_page' ) );
@@ -225,7 +237,22 @@ function alarede_customize_register( $wp_customize ) {
 	$wp_customize->add_setting( 'alarede_contact_shortcode', array( 'default' => '', 'sanitize_callback' => 'wp_kses_post' ) );
 	$wp_customize->add_control( 'alarede_contact_shortcode', array( 'label' => __( 'Contact Form Shortcode (optional)', 'alarede' ), 'description' => __( 'Paste a form shortcode to override the built-in appointment booking form. Leave blank to use the booking form.', 'alarede' ), 'section' => 'alarede_contact', 'type' => 'textarea' ) );
 	$wp_customize->add_setting( 'alarede_contact_map', array( 'default' => '', 'sanitize_callback' => 'alarede_sanitize_embed' ) );
-	$wp_customize->add_control( 'alarede_contact_map', array( 'label' => __( 'Map Embed (optional)', 'alarede' ), 'description' => __( 'Paste a Google Maps embed <iframe> to show a map on the Contact page template.', 'alarede' ), 'section' => 'alarede_contact', 'type' => 'textarea' ) );
+	$wp_customize->add_control( 'alarede_contact_map', array( 'label' => __( 'Map Embed (optional)', 'alarede' ), 'description' => __( 'In Google Maps choose Share → Embed a map → COPY HTML, then paste the full <iframe>…</iframe> here. It appears in the homepage contact section and on the Contact page. A plain map link will not work.', 'alarede' ), 'section' => 'alarede_contact', 'type' => 'textarea' ) );
+
+	/* ===============================================================
+	 * 8. CLIENTS CAROUSEL
+	 * =============================================================== */
+	$wp_customize->add_section(
+		'alarede_clients',
+		array(
+			'title'       => __( 'Clients Carousel', 'alarede' ),
+			'panel'       => 'alarede_front_page',
+			'description' => __( 'A scrolling band of client logos before the footer. Add clients under Clients in the dashboard (each client’s Featured Image is its logo).', 'alarede' ),
+		)
+	);
+	$add_toggle( 'alarede_clients_enable', __( 'Show this section', 'alarede' ), 'alarede_clients' );
+	$add_text( 'alarede_clients_kicker', __( 'Overline Text', 'alarede' ), __( 'Trusted By', 'alarede' ), 'alarede_clients' );
+	$add_text( 'alarede_clients_title', __( 'Title', 'alarede' ), __( 'Our Clients & Partners', 'alarede' ), 'alarede_clients' );
 
 	/* ===============================================================
 	 * BOOKING & reCAPTCHA
@@ -308,6 +335,35 @@ function alarede_customize_register( $wp_customize ) {
 	// --- FAQ -------------------------------------------------------------
 	$wp_customize->add_section( 'alarede_faq', array( 'title' => __( 'FAQ Page', 'alarede' ), 'panel' => 'alarede_pages' ) );
 	$add_list( 'alarede_faq', 'alarede_faq_item', $tpl_defaults['faqs'], __( 'Question', 'alarede' ), __( 'Answer', 'alarede' ) );
+
+	// --- About / Founder -------------------------------------------------
+	$wp_customize->add_section(
+		'alarede_about',
+		array(
+			'title'       => __( 'About Page', 'alarede' ),
+			'panel'       => 'alarede_pages',
+			'description' => __( 'Content for the About / Founder page template. The bio below is used when the page itself has no editor content.', 'alarede' ),
+		)
+	);
+	$add_image( 'alarede_about_portrait', __( 'Portrait Image', 'alarede' ), 'alarede_about' );
+	$add_text( 'alarede_about_kicker', __( 'Overline Text', 'alarede' ), __( 'Meet the Founder', 'alarede' ), 'alarede_about' );
+	$add_text( 'alarede_about_bio', __( 'Biography', 'alarede' ), __( "A storyteller at heart, our founder has spent two decades turning couples' visions into flawless celebrations.\n\nWhat began as a passion for bringing people together has grown into a boutique studio trusted to plan some of the most memorable weddings and events.", 'alarede' ), 'alarede_about', 'textarea' );
+	// Stats.
+	$about_stats = array(
+		array( '20+', __( 'Years Experience', 'alarede' ) ),
+		array( '500+', __( 'Events Created', 'alarede' ) ),
+		array( '100%', __( 'Bespoke', 'alarede' ) ),
+	);
+	foreach ( $about_stats as $i => $stat ) {
+		$n = $i + 1;
+		$add_text( "alarede_about_stat_{$n}_num", sprintf( __( 'Stat %d — Number', 'alarede' ), $n ), $stat[0], 'alarede_about' );
+		$add_text( "alarede_about_stat_{$n}_label", sprintf( __( 'Stat %d — Label', 'alarede' ), $n ), $stat[1], 'alarede_about' );
+	}
+	// Philosophy heading + values.
+	$add_text( 'alarede_about_phil_kicker', __( 'Philosophy — Overline', 'alarede' ), __( 'Our Philosophy', 'alarede' ), 'alarede_about' );
+	$add_text( 'alarede_about_phil_title', __( 'Philosophy — Title', 'alarede' ), __( 'How We Work', 'alarede' ), 'alarede_about' );
+	$add_text( 'alarede_about_phil_intro', __( 'Philosophy — Intro', 'alarede' ), __( 'Three principles guide every celebration we create.', 'alarede' ), 'alarede_about', 'textarea' );
+	$add_list( 'alarede_about', 'alarede_about_value', $tpl_defaults['about_values'], __( 'Title', 'alarede' ), __( 'Description', 'alarede' ) );
 
 	/* ===============================================================
 	 * COLOURS

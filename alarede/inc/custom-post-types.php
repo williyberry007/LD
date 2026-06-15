@@ -178,6 +178,32 @@ function alarede_register_slides() {
 add_action( 'init', 'alarede_register_slides' );
 
 /**
+ * Register the Clients post type (logo = featured image) for the homepage
+ * clients carousel.
+ */
+function alarede_register_clients() {
+	register_post_type(
+		'ae_client',
+		array(
+			'labels'              => array(
+				'name'          => __( 'Clients', 'alarede' ),
+				'singular_name' => __( 'Client', 'alarede' ),
+				'add_new_item'  => __( 'Add New Client', 'alarede' ),
+				'edit_item'     => __( 'Edit Client', 'alarede' ),
+				'menu_name'     => __( 'Clients', 'alarede' ),
+			),
+			'public'              => false,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'exclude_from_search' => true,
+			'menu_icon'           => 'dashicons-groups',
+			'supports'            => array( 'title', 'thumbnail', 'page-attributes' ),
+		)
+	);
+}
+add_action( 'init', 'alarede_register_clients' );
+
+/**
  * Slide media + content meta box.
  */
 function alarede_slide_meta_box() {

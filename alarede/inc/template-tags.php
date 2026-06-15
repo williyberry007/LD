@@ -124,6 +124,11 @@ function alarede_template_defaults( $group = '' ) {
 			array( __( 'Care', 'alarede' ), __( 'We look after our clients and each other with genuine warmth.', 'alarede' ) ),
 			array( __( 'Growth', 'alarede' ), __( 'We invest in learning, mentorship and creative freedom.', 'alarede' ) ),
 		),
+		'about_values' => array(
+			array( __( 'Listen', 'alarede' ), __( 'We begin with your story, your people and your vision — never a template.', 'alarede' ) ),
+			array( __( 'Design', 'alarede' ), __( 'We translate that vision into a cohesive, beautiful and personal design.', 'alarede' ) ),
+			array( __( 'Deliver', 'alarede' ), __( 'On the day, we manage every detail so you can simply be present.', 'alarede' ) ),
+		),
 		'jobs'    => array(
 			array( __( 'Event Planner', 'alarede' ), __( 'Full-time · Hybrid', 'alarede' ) ),
 			array( __( 'Junior Coordinator', 'alarede' ), __( 'Full-time · On-site', 'alarede' ) ),

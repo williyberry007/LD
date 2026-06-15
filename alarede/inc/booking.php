@@ -84,6 +84,19 @@ function alarede_seed_appointment_types() {
 add_action( 'after_switch_theme', 'alarede_seed_appointment_types' );
 
 /**
+ * Seed appointment types once even on a theme update (no re-activation),
+ * guarded by an option so it only runs a single time.
+ */
+function alarede_maybe_seed_types() {
+	if ( get_option( 'alarede_types_seeded' ) ) {
+		return;
+	}
+	alarede_seed_appointment_types();
+	update_option( 'alarede_types_seeded', 1 );
+}
+add_action( 'init', 'alarede_maybe_seed_types', 20 );
+
+/**
  * Get the configured time slots as an array (one per line in the Customizer).
  *
  * @return array Empty when none configured (form then uses a free time input).

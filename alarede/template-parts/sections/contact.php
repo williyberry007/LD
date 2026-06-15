@@ -12,6 +12,7 @@ $email     = get_theme_mod( 'alarede_contact_email', 'hello@example.com' );
 $phone     = get_theme_mod( 'alarede_contact_phone', '' );
 $address   = get_theme_mod( 'alarede_contact_address', '' );
 $shortcode = get_theme_mod( 'alarede_contact_shortcode', '' );
+$map       = get_theme_mod( 'alarede_contact_map', '' );
 ?>
 <section class="ae-section ae-contact" id="contact">
 	<div class="ae-container">
@@ -41,5 +42,9 @@ $shortcode = get_theme_mod( 'alarede_contact_shortcode', '' );
 				?>
 			</div>
 		</div>
+
+		<?php if ( $map ) : ?>
+			<div class="ae-contact__map" style="margin-top:3rem;"><?php echo alarede_sanitize_embed( $map ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitised iframe. ?></div>
+		<?php endif; ?>
 	</div>
 </section>

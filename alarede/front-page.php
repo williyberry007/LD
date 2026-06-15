@@ -18,6 +18,9 @@ get_header();
 	if ( get_theme_mod( 'alarede_intro_enable', true ) ) {
 		get_template_part( 'template-parts/sections/intro' );
 	}
+	if ( get_theme_mod( 'alarede_feature_enable', true ) ) {
+		get_template_part( 'template-parts/sections/feature' );
+	}
 	if ( get_theme_mod( 'alarede_services_enable', true ) ) {
 		get_template_part( 'template-parts/sections/services' );
 	}
@@ -32,6 +35,9 @@ get_header();
 	}
 	if ( get_theme_mod( 'alarede_contact_enable', true ) ) {
 		get_template_part( 'template-parts/sections/contact' );
+	}
+	if ( get_theme_mod( 'alarede_clients_enable', true ) ) {
+		get_template_part( 'template-parts/sections/clients' );
 	}
 
 	// If the front page is a static page with content, render it below the sections.

@@ -92,7 +92,9 @@ editable there too.
 ## Content types
 
 - **Hero Slides** — image/video slides for the hero.
-- **Services** — used by the homepage Services section when present.
+- **Clients** — logos for the homepage clients carousel (logo = Featured Image).
+- **Services** — shown on the homepage as image cards that link to each
+  service page (Featured Image + excerpt). Add Service posts to populate them.
 - **Portfolio** (with categories) — homepage gallery, the Media Gallery page,
   and `/portfolio/`.
 - **Testimonials** — quotes (with names + venue) for the slider.
