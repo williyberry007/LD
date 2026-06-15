@@ -204,6 +204,102 @@ function alarede_register_clients() {
 add_action( 'init', 'alarede_register_clients' );
 
 /**
+ * Register the Jobs post type for the Careers page (full details + apply link).
+ */
+function alarede_register_jobs() {
+	register_post_type(
+		'ae_job',
+		array(
+			'labels'       => array(
+				'name'          => __( 'Jobs', 'alarede' ),
+				'singular_name' => __( 'Job', 'alarede' ),
+				'add_new_item'  => __( 'Add New Job', 'alarede' ),
+				'edit_item'     => __( 'Edit Job', 'alarede' ),
+				'menu_name'     => __( 'Jobs', 'alarede' ),
+			),
+			'public'       => true,
+			'has_archive'  => false,
+			'menu_icon'    => 'dashicons-businessperson',
+			'rewrite'      => array( 'slug' => 'jobs' ),
+			'supports'     => array( 'title', 'editor', 'excerpt', 'thumbnail', 'page-attributes' ),
+			'show_in_rest' => true,
+		)
+	);
+}
+add_action( 'init', 'alarede_register_jobs' );
+
+/**
+ * Job meta box: employment details + apply link.
+ */
+function alarede_job_meta_box() {
+	add_meta_box( 'ae_job_meta', __( 'Job Details', 'alarede' ), 'alarede_job_meta_box_cb', 'ae_job', 'side' );
+}
+add_action( 'add_meta_boxes', 'alarede_job_meta_box' );
+
+/**
+ * Render the job meta box.
+ *
+ * @param WP_Post $post Current post.
+ */
+function alarede_job_meta_box_cb( $post ) {
+	wp_nonce_field( 'ae_job_meta', 'ae_job_nonce' );
+	$meta  = get_post_meta( $post->ID, '_ae_job_meta', true );
+	$apply = get_post_meta( $post->ID, '_ae_job_apply', true );
+	?>
+	<p>
+		<label for="ae_job_meta"><strong><?php esc_html_e( 'Employment Detail', 'alarede' ); ?></strong></label>
+		<input type="text" id="ae_job_meta" name="ae_job_meta" value="<?php echo esc_attr( $meta ); ?>" style="width:100%;" placeholder="<?php esc_attr_e( 'Full-time · Hybrid', 'alarede' ); ?>" />
+	</p>
+	<p>
+		<label for="ae_job_apply"><strong><?php esc_html_e( 'Apply Link (URL or email)', 'alarede' ); ?></strong></label>
+		<input type="text" id="ae_job_apply" name="ae_job_apply" value="<?php echo esc_attr( $apply ); ?>" style="width:100%;" placeholder="https://… or jobs@example.com" />
+		<span class="description"><?php esc_html_e( 'Leave blank to use the Contact page. Use the post content for the full job description.', 'alarede' ); ?></span>
+	</p>
+	<?php
+}
+
+/**
+ * Save the job meta.
+ *
+ * @param int $post_id Post ID.
+ */
+function alarede_save_job_meta( $post_id ) {
+	if ( ! isset( $_POST['ae_job_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['ae_job_nonce'] ) ), 'ae_job_meta' ) ) {
+		return;
+	}
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+	if ( isset( $_POST['ae_job_meta'] ) ) {
+		update_post_meta( $post_id, '_ae_job_meta', sanitize_text_field( wp_unslash( $_POST['ae_job_meta'] ) ) );
+	}
+	if ( isset( $_POST['ae_job_apply'] ) ) {
+		update_post_meta( $post_id, '_ae_job_apply', sanitize_text_field( wp_unslash( $_POST['ae_job_apply'] ) ) );
+	}
+}
+add_action( 'save_post_ae_job', 'alarede_save_job_meta' );
+
+/**
+ * Resolve a job's apply URL (mailto for emails), falling back to the Contact page.
+ *
+ * @param int $post_id Job ID.
+ * @return string
+ */
+function alarede_job_apply_url( $post_id ) {
+	$apply = get_post_meta( $post_id, '_ae_job_apply', true );
+	if ( ! $apply ) {
+		return home_url( '/contact/' );
+	}
+	if ( is_email( $apply ) ) {
+		return 'mailto:' . $apply;
+	}
+	return $apply;
+}
+
+/**
  * Slide media + content meta box.
  */
 function alarede_slide_meta_box() {

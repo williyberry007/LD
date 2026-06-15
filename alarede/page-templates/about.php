@@ -35,7 +35,16 @@ while ( have_posts() ) :
 		<div class="ae-container">
 			<div class="ae-founder__grid">
 				<div class="ae-founder__image ae-reveal">
-					<img src="<?php echo esc_url( $portrait ); ?>" alt="<?php the_title_attribute(); ?>" loading="lazy">
+					<?php
+					$ptype  = get_theme_mod( 'alarede_about_portrait_type', 'image' );
+					$pvideo = get_theme_mod( 'alarede_about_portrait_video', '' );
+					$video_markup = ( 'video' === $ptype && $pvideo ) ? alarede_inline_video( $pvideo, $portrait ) : '';
+					if ( $video_markup ) {
+						echo $video_markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from esc_url() internally.
+					} else {
+						printf( '<img src="%1$s" alt="%2$s" loading="lazy">', esc_url( $portrait ), esc_attr( get_the_title() ) );
+					}
+					?>
 				</div>
 				<div class="ae-founder__body ae-reveal">
 					<?php if ( $kicker ) : ?><span class="ae-kicker"><?php echo esc_html( $kicker ); ?></span><?php endif; ?>
@@ -90,7 +99,7 @@ while ( have_posts() ) :
 					<?php endforeach; ?>
 				</div>
 				<div style="text-align:center;margin-top:3rem;">
-					<a class="ae-btn ae-btn--solid" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'Work With Us', 'alarede' ); ?></a>
+					<a class="ae-btn ae-btn--solid" href="<?php echo esc_url( home_url( '/careers/' ) ); ?>"><?php esc_html_e( 'Work With Us', 'alarede' ); ?></a>
 				</div>
 			</div>
 		</section>

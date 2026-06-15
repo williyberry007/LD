@@ -265,6 +265,8 @@ function alarede_customize_register( $wp_customize ) {
 			'description' => __( 'The contact form is an appointment booking form. Add or edit the options under Bookings → Appointment Types in the dashboard, and see all submissions under Bookings.', 'alarede' ),
 		)
 	);
+	$add_text( 'alarede_booking_types', __( 'Add Appointment Types (one per line)', 'alarede' ), '', 'alarede_booking', 'textarea' );
+	$wp_customize->get_control( 'alarede_booking_types' )->description = __( 'Type one appointment type per line and Publish — each is added to the booking form. You can also manage them under Bookings → Appointment Types. Existing types are never removed here.', 'alarede' );
 	$add_text( 'alarede_booking_email', __( 'Send Bookings To (email)', 'alarede' ), 'info@alarede.com', 'alarede_booking' );
 	$add_text( 'alarede_booking_success', __( 'Success Message', 'alarede' ), __( 'Thank you! Your appointment request has been received — we will confirm by email shortly.', 'alarede' ), 'alarede_booking', 'textarea' );
 
@@ -323,6 +325,8 @@ function alarede_customize_register( $wp_customize ) {
 	// --- Academy ---------------------------------------------------------
 	$wp_customize->add_section( 'alarede_academy', array( 'title' => __( 'Academy Page', 'alarede' ), 'panel' => 'alarede_pages' ) );
 	$add_heading( 'alarede_academy', __( 'Courses', 'alarede' ), __( 'What You Can Learn', 'alarede' ), __( 'Practical, hands-on training across our full range of specialities.', 'alarede' ) );
+	$add_text( 'alarede_academy_video', __( 'Intro Video URL (MP4, YouTube or Vimeo)', 'alarede' ), '', 'alarede_academy', 'url' );
+	$add_image( 'alarede_academy_video_poster', __( 'Video Poster Image (optional)', 'alarede' ), 'alarede_academy' );
 	$add_list( 'alarede_academy', 'alarede_academy_item', $tpl_defaults['academy'], __( 'Course', 'alarede' ), __( 'Description', 'alarede' ) );
 
 	// --- Careers ---------------------------------------------------------
@@ -346,6 +350,17 @@ function alarede_customize_register( $wp_customize ) {
 		)
 	);
 	$add_image( 'alarede_about_portrait', __( 'Portrait Image', 'alarede' ), 'alarede_about' );
+	$wp_customize->add_setting( 'alarede_about_portrait_type', array( 'default' => 'image', 'sanitize_callback' => 'sanitize_key' ) );
+	$wp_customize->add_control(
+		'alarede_about_portrait_type',
+		array(
+			'label'   => __( 'Portrait Media', 'alarede' ),
+			'section' => 'alarede_about',
+			'type'    => 'select',
+			'choices' => array( 'image' => __( 'Image', 'alarede' ), 'video' => __( 'Video', 'alarede' ) ),
+		)
+	);
+	$add_text( 'alarede_about_portrait_video', __( 'Portrait Video URL (MP4, YouTube or Vimeo)', 'alarede' ), '', 'alarede_about', 'url' );
 	$add_text( 'alarede_about_kicker', __( 'Overline Text', 'alarede' ), __( 'Meet the Founder', 'alarede' ), 'alarede_about' );
 	$add_text( 'alarede_about_bio', __( 'Biography', 'alarede' ), __( "A storyteller at heart, our founder has spent two decades turning couples' visions into flawless celebrations.\n\nWhat began as a passion for bringing people together has grown into a boutique studio trusted to plan some of the most memorable weddings and events.", 'alarede' ), 'alarede_about', 'textarea' );
 	// Stats.

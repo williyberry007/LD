@@ -97,6 +97,24 @@ function alarede_maybe_seed_types() {
 add_action( 'init', 'alarede_maybe_seed_types', 20 );
 
 /**
+ * Create appointment-type terms from the Customizer textarea when settings are
+ * saved. One type per line; existing terms are left untouched.
+ */
+function alarede_create_types_from_customizer() {
+	$raw = get_theme_mod( 'alarede_booking_types', '' );
+	if ( ! $raw ) {
+		return;
+	}
+	$names = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $raw ) ) );
+	foreach ( $names as $name ) {
+		if ( ! term_exists( $name, 'ae_appt_type' ) ) {
+			wp_insert_term( $name, 'ae_appt_type' );
+		}
+	}
+}
+add_action( 'customize_save_after', 'alarede_create_types_from_customizer' );
+
+/**
  * Get the configured time slots as an array (one per line in the Customizer).
  *
  * @return array Empty when none configured (form then uses a free time input).

@@ -47,6 +47,9 @@ while ( have_posts() ) :
 					<?php if ( $address ) : ?>
 						<p><strong><?php esc_html_e( 'Address', 'alarede' ); ?></strong><?php echo wp_kses_post( nl2br( $address ) ); ?></p>
 					<?php endif; ?>
+					<?php if ( $map ) : ?>
+						<div class="ae-contact__map" style="margin-top:1.5rem;"><?php echo alarede_sanitize_embed( $map ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitised iframe. ?></div>
+					<?php endif; ?>
 				</div>
 
 				<div class="ae-contact__form ae-reveal">
@@ -59,10 +62,6 @@ while ( have_posts() ) :
 					?>
 				</div>
 			</div>
-
-			<?php if ( $map ) : ?>
-				<div class="ae-contact__map" style="margin-top:3rem;"><?php echo alarede_sanitize_embed( $map ); ?></div>
-			<?php endif; ?>
 		</div>
 	</section>
 

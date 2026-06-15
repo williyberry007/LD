@@ -68,16 +68,52 @@ while ( have_posts() ) :
 				get_theme_mod( 'alarede_careers_jobs_title', __( 'Current Openings', 'alarede' ) )
 			);
 			?>
+			<?php
+			$job_query = new WP_Query(
+				array(
+					'post_type'      => 'ae_job',
+					'posts_per_page' => 20,
+					'orderby'        => 'menu_order date',
+					'order'          => 'ASC',
+				)
+			);
+			?>
 			<div class="ae-jobs">
-				<?php foreach ( $jobs as $job ) : ?>
-					<div class="ae-job ae-reveal">
-						<div>
-							<h3><?php echo esc_html( $job[0] ); ?></h3>
-							<span class="ae-job__meta"><?php echo esc_html( $job[1] ); ?></span>
+				<?php if ( $job_query->have_posts() ) : ?>
+					<?php
+					while ( $job_query->have_posts() ) :
+						$job_query->the_post();
+						$job_meta  = get_post_meta( get_the_ID(), '_ae_job_meta', true );
+						$apply_url = alarede_job_apply_url( get_the_ID() );
+						?>
+						<div class="ae-job ae-reveal">
+							<div class="ae-job__head">
+								<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+								<?php if ( $job_meta ) : ?><span class="ae-job__meta"><?php echo esc_html( $job_meta ); ?></span><?php endif; ?>
+								<?php if ( get_the_excerpt() ) : ?><p class="ae-job__excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 28 ) ); ?></p><?php endif; ?>
+							</div>
+							<div class="ae-job__actions">
+								<a class="ae-btn" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Full Details', 'alarede' ); ?></a>
+								<a class="ae-btn ae-btn--solid" href="<?php echo esc_url( $apply_url ); ?>"><?php esc_html_e( 'Apply', 'alarede' ); ?></a>
+							</div>
 						</div>
-						<a class="ae-btn" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'Apply', 'alarede' ); ?></a>
-					</div>
-				<?php endforeach; ?>
+						<?php
+					endwhile;
+					wp_reset_postdata();
+					?>
+				<?php else : ?>
+					<?php foreach ( $jobs as $job ) : ?>
+						<div class="ae-job ae-reveal">
+							<div class="ae-job__head">
+								<h3><?php echo esc_html( $job[0] ); ?></h3>
+								<span class="ae-job__meta"><?php echo esc_html( $job[1] ); ?></span>
+							</div>
+							<div class="ae-job__actions">
+								<a class="ae-btn ae-btn--solid" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'Apply', 'alarede' ); ?></a>
+							</div>
+						</div>
+					<?php endforeach; ?>
+				<?php endif; ?>
 			</div>
 			<p style="text-align:center;color:var(--ae-color-muted);margin-top:2rem;">
 				<?php esc_html_e( 'Don’t see your role? Send us your portfolio anyway — we’d love to hear from you.', 'alarede' ); ?>

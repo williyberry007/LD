@@ -95,6 +95,9 @@ editable there too.
 - **Clients** — logos for the homepage clients carousel (logo = Featured Image).
 - **Services** — shown on the homepage as image cards that link to each
   service page (Featured Image + excerpt). Add Service posts to populate them.
+- **Jobs** — Careers openings with full details (post content), an employment
+  detail line and an editable apply link (URL or email). Each lists on the
+  Careers page with "Full Details" + "Apply" buttons and its own page.
 - **Portfolio** (with categories) — homepage gallery, the Media Gallery page,
   and `/portfolio/`.
 - **Testimonials** — quotes (with names + venue) for the slider.

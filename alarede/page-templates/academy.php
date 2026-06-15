@@ -38,6 +38,19 @@ while ( have_posts() ) :
 		</div>
 	</section>
 
+	<?php
+	$academy_video  = get_theme_mod( 'alarede_academy_video', '' );
+	$academy_poster = get_theme_mod( 'alarede_academy_video_poster', '' );
+	$academy_markup = $academy_video ? alarede_inline_video( $academy_video, $academy_poster ) : '';
+	if ( $academy_markup ) :
+		?>
+		<section class="ae-section ae-section--tight">
+			<div class="ae-container">
+				<div class="ae-academy-video"><?php echo $academy_markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from esc_url() internally. ?></div>
+			</div>
+		</section>
+	<?php endif; ?>
+
 	<section class="ae-section ae-section--cream">
 		<div class="ae-container">
 			<?php

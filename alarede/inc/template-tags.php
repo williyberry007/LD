@@ -176,6 +176,65 @@ function alarede_get_list( $prefix, $group ) {
 }
 
 /**
+ * Build a muted, looping background embed for a YouTube/Vimeo URL.
+ *
+ * @param string $url Source URL.
+ * @return string Iframe HTML, or '' when the provider is not recognised.
+ */
+function alarede_video_embed( $url ) {
+	if ( preg_match( '~(?:youtube\.com/(?:watch\?v=|embed/|shorts/)|youtu\.be/)([A-Za-z0-9_-]{11})~', $url, $m ) ) {
+		$id  = $m[1];
+		$src = add_query_arg(
+			array(
+				'autoplay'       => 1,
+				'mute'           => 1,
+				'loop'           => 1,
+				'playlist'       => $id,
+				'controls'       => 0,
+				'modestbranding' => 1,
+				'playsinline'    => 1,
+				'rel'            => 0,
+			),
+			'https://www.youtube.com/embed/' . $id
+		);
+		return sprintf( '<iframe src="%s" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen title="%s"></iframe>', esc_url( $src ), esc_attr__( 'Video', 'alarede' ) );
+	}
+	if ( preg_match( '~vimeo\.com/(?:video/)?(\d+)~', $url, $m ) ) {
+		$src = add_query_arg(
+			array( 'autoplay' => 1, 'muted' => 1, 'loop' => 1, 'background' => 1 ),
+			'https://player.vimeo.com/video/' . $m[1]
+		);
+		return sprintf( '<iframe src="%s" frameborder="0" allow="autoplay; fullscreen" allowfullscreen title="%s"></iframe>', esc_url( $src ), esc_attr__( 'Video', 'alarede' ) );
+	}
+	return '';
+}
+
+/**
+ * Return inline video markup for a URL: a self-hosted file plays as a muted
+ * looping clip; a YouTube/Vimeo link is embedded.
+ *
+ * @param string $url    Video URL.
+ * @param string $poster Optional poster image URL (self-hosted only).
+ * @return string Markup, or '' when nothing renders.
+ */
+function alarede_inline_video( $url, $poster = '' ) {
+	if ( ! $url ) {
+		return '';
+	}
+	$ext = strtolower( pathinfo( (string) wp_parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
+	if ( in_array( $ext, array( 'mp4', 'webm', 'ogg' ), true ) ) {
+		return sprintf(
+			'<video class="ae-inline-video" autoplay muted loop playsinline preload="auto"%1$s><source src="%2$s" type="video/%3$s"></video>',
+			$poster ? ' poster="' . esc_url( $poster ) . '"' : '',
+			esc_url( $url ),
+			esc_attr( $ext )
+		);
+	}
+	$embed = alarede_video_embed( $url );
+	return $embed ? '<div class="ae-inline-embed">' . $embed . '</div>' : '';
+}
+
+/**
  * Return an inline SVG icon for a social network.
  *
  * @param string $network instagram|facebook|pinterest|youtube.
