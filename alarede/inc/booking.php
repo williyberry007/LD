@@ -288,6 +288,9 @@ function alarede_booking_meta_box_cb( $post ) {
 		echo '<tr><th style="width:140px;">' . esc_html( $label ) . '</th><td>' . ( $value ? esc_html( $value ) : '—' ) . '</td></tr>';
 	}
 	echo '<tr><th>' . esc_html__( 'Message', 'alarede' ) . '</th><td>' . ( $message ? nl2br( esc_html( $message ) ) : '—' ) . '</td></tr>';
+	$mail_sent = get_post_meta( $post->ID, '_ae_booking_mail_sent', true );
+	$mail_label = ( '1' === (string) $mail_sent ) ? __( 'Sent ✓', 'alarede' ) : __( 'Not delivered — configure SMTP under Customize → Email Delivery', 'alarede' );
+	echo '<tr><th>' . esc_html__( 'Admin email', 'alarede' ) . '</th><td>' . esc_html( $mail_label ) . '</td></tr>';
 	echo '<tr><th><label for="ae_booking_status">' . esc_html__( 'Status', 'alarede' ) . '</label></th><td><select name="ae_booking_status" id="ae_booking_status">';
 	foreach ( array( 'new', 'confirmed', 'completed', 'cancelled' ) as $opt ) {
 		printf( '<option value="%1$s" %2$s>%3$s</option>', esc_attr( $opt ), selected( $status, $opt, false ), esc_html( ucfirst( $opt ) ) );
@@ -365,6 +368,68 @@ function alarede_verify_recaptcha() {
 	}
 	$body = json_decode( wp_remote_retrieve_body( $request ), true );
 	return ! empty( $body['success'] );
+}
+
+/**
+ * Resolve SMTP settings from wp-config constants (preferred) or the Customizer.
+ *
+ * @return array|null Settings array, or null when SMTP is not configured.
+ */
+function alarede_smtp_config() {
+	$host = defined( 'ALAREDE_SMTP_HOST' ) ? ALAREDE_SMTP_HOST : get_theme_mod( 'alarede_smtp_host', '' );
+	if ( ! $host ) {
+		return null;
+	}
+	return array(
+		'host'      => $host,
+		'port'      => defined( 'ALAREDE_SMTP_PORT' ) ? (int) ALAREDE_SMTP_PORT : (int) get_theme_mod( 'alarede_smtp_port', 587 ),
+		'secure'    => defined( 'ALAREDE_SMTP_SECURE' ) ? ALAREDE_SMTP_SECURE : get_theme_mod( 'alarede_smtp_secure', 'tls' ),
+		'user'      => defined( 'ALAREDE_SMTP_USER' ) ? ALAREDE_SMTP_USER : get_theme_mod( 'alarede_smtp_user', '' ),
+		'pass'      => defined( 'ALAREDE_SMTP_PASS' ) ? ALAREDE_SMTP_PASS : get_theme_mod( 'alarede_smtp_pass', '' ),
+		'from'      => get_theme_mod( 'alarede_smtp_from', get_theme_mod( 'alarede_booking_email', '' ) ),
+		'from_name' => get_theme_mod( 'alarede_smtp_from_name', get_bloginfo( 'name' ) ),
+	);
+}
+
+/**
+ * Configure PHPMailer to send via SMTP when the theme's SMTP settings are set.
+ *
+ * @param PHPMailer\PHPMailer\PHPMailer $phpmailer Mailer instance (by ref).
+ */
+function alarede_phpmailer_init( $phpmailer ) {
+	$c = alarede_smtp_config();
+	if ( ! $c ) {
+		return;
+	}
+	$phpmailer->isSMTP();
+	$phpmailer->Host = $c['host'];
+	$phpmailer->Port = $c['port'];
+	if ( 'none' !== $c['secure'] ) {
+		$phpmailer->SMTPSecure = $c['secure'];
+	}
+	if ( $c['user'] ) {
+		$phpmailer->SMTPAuth = true;
+		$phpmailer->Username = $c['user'];
+		$phpmailer->Password = $c['pass'];
+	}
+}
+add_action( 'phpmailer_init', 'alarede_phpmailer_init' );
+
+/**
+ * Force a consistent From address/name when SMTP is configured (the From should
+ * match the authenticated mailbox for the best deliverability).
+ */
+function alarede_mail_from( $email ) {
+	$c = alarede_smtp_config();
+	return ( $c && is_email( $c['from'] ) ) ? $c['from'] : $email;
+}
+function alarede_mail_from_name( $name ) {
+	$c = alarede_smtp_config();
+	return ( $c && $c['from_name'] ) ? $c['from_name'] : $name;
+}
+if ( alarede_smtp_config() ) {
+	add_filter( 'wp_mail_from', 'alarede_mail_from' );
+	add_filter( 'wp_mail_from_name', 'alarede_mail_from_name' );
 }
 
 /**
@@ -476,7 +541,8 @@ function alarede_handle_booking() {
 		'Content-Type: text/plain; charset=UTF-8',
 		sprintf( 'Reply-To: %s <%s>', $name, $email ),
 	);
-	wp_mail( $to, $subject, implode( "\n", $lines ), $headers );
+	$sent = wp_mail( $to, $subject, implode( "\n", $lines ), $headers );
+	update_post_meta( $post_id, '_ae_booking_mail_sent', $sent ? 1 : 0 );
 
 	// Confirmation auto-reply to the customer.
 	if ( get_theme_mod( 'alarede_booking_confirm_enable', true ) ) {

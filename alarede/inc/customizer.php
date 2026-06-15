@@ -285,6 +285,28 @@ function alarede_customize_register( $wp_customize ) {
 	$add_text( 'alarede_recaptcha_secret', __( 'reCAPTCHA v2 Secret Key', 'alarede' ), '', 'alarede_booking' );
 
 	/* ===============================================================
+	 * EMAIL DELIVERY (SMTP)
+	 * =============================================================== */
+	$wp_customize->add_section(
+		'alarede_smtp',
+		array(
+			'title'       => __( 'Email Delivery (SMTP)', 'alarede' ),
+			'priority'    => 27,
+			'description' => __( 'WordPress’ default mail is often blocked or marked as spam, so booking emails may not arrive. Enter your mailbox SMTP details here to send reliably (or install an SMTP plugin instead). Bookings are always saved under Bookings even if email fails.', 'alarede' ),
+		)
+	);
+	$add_text( 'alarede_smtp_host', __( 'SMTP Host', 'alarede' ), '', 'alarede_smtp' );
+	$wp_customize->add_setting( 'alarede_smtp_port', array( 'default' => 587, 'sanitize_callback' => 'absint' ) );
+	$wp_customize->add_control( 'alarede_smtp_port', array( 'label' => __( 'SMTP Port', 'alarede' ), 'section' => 'alarede_smtp', 'type' => 'number', 'input_attrs' => array( 'min' => 0 ) ) );
+	$wp_customize->add_setting( 'alarede_smtp_secure', array( 'default' => 'tls', 'sanitize_callback' => 'sanitize_key' ) );
+	$wp_customize->add_control( 'alarede_smtp_secure', array( 'label' => __( 'Encryption', 'alarede' ), 'section' => 'alarede_smtp', 'type' => 'select', 'choices' => array( 'tls' => 'TLS', 'ssl' => 'SSL', 'none' => __( 'None', 'alarede' ) ) ) );
+	$add_text( 'alarede_smtp_user', __( 'SMTP Username', 'alarede' ), '', 'alarede_smtp' );
+	$add_text( 'alarede_smtp_pass', __( 'SMTP Password', 'alarede' ), '', 'alarede_smtp' );
+	$wp_customize->get_control( 'alarede_smtp_pass' )->description = __( 'Stored in the database. For better security, define ALAREDE_SMTP_PASS (and HOST/PORT/SECURE/USER) in wp-config.php instead — constants take priority.', 'alarede' );
+	$add_text( 'alarede_smtp_from', __( 'From Email', 'alarede' ), '', 'alarede_smtp' );
+	$add_text( 'alarede_smtp_from_name', __( 'From Name', 'alarede' ), '', 'alarede_smtp' );
+
+	/* ===============================================================
 	 * PAGE TEMPLATES (editable lists)
 	 * =============================================================== */
 	$wp_customize->add_panel(

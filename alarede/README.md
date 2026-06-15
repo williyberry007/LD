@@ -104,6 +104,18 @@ editable there too.
   and `/portfolio/`.
 - **Testimonials** — quotes (with names + venue) for the slider.
 
+## Email delivery (SMTP)
+
+WordPress' default mail (PHP `mail()`) is frequently blocked or spam-filtered by
+hosts, so booking emails may not reach `info@alarede.com`. To send reliably,
+enter your mailbox SMTP details in **Customize → Email Delivery (SMTP)** (host,
+port, encryption, username, password, From address) — no plugin needed. For
+better security you can instead define the credentials in `wp-config.php`
+(`ALAREDE_SMTP_HOST`, `ALAREDE_SMTP_PORT`, `ALAREDE_SMTP_SECURE`,
+`ALAREDE_SMTP_USER`, `ALAREDE_SMTP_PASS`), which take priority over the
+Customizer values. Every booking is saved under **Bookings** regardless of
+email status, and each booking shows whether its admin email was sent.
+
 ## Appointment booking
 
 The contact form is an **appointment booking form**: visitors pick an
