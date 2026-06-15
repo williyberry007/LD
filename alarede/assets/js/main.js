@@ -17,6 +17,7 @@
 		setupSmoothScroll();
 		setupFaq();
 		setupGalleryFilter();
+		setupJobFilter();
 		setupBookingSlots();
 	} );
 
@@ -163,6 +164,27 @@
 				btn.classList.add( 'is-active' );
 				items.forEach( function ( item ) {
 					var show = target === '*' || item.getAttribute( 'data-cat' ) === target;
+					item.classList.toggle( 'is-hidden', ! show );
+				} );
+			} );
+		} );
+	}
+
+	/* Careers list category filter (a job may belong to several categories). */
+	function setupJobFilter() {
+		var filters = document.querySelectorAll( '.ae-jobs__filter' );
+		var items   = document.querySelectorAll( '.ae-job[data-cat]' );
+		if ( ! filters.length ) {
+			return;
+		}
+		filters.forEach( function ( btn ) {
+			btn.addEventListener( 'click', function () {
+				var target = btn.getAttribute( 'data-filter' );
+				filters.forEach( function ( b ) { b.classList.remove( 'is-active' ); } );
+				btn.classList.add( 'is-active' );
+				items.forEach( function ( item ) {
+					var cats = ( item.getAttribute( 'data-cat' ) || '' ).split( ' ' );
+					var show = target === '*' || cats.indexOf( target ) !== -1;
 					item.classList.toggle( 'is-hidden', ! show );
 				} );
 			} );

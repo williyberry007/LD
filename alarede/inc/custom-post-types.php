@@ -229,6 +229,29 @@ function alarede_register_jobs() {
 add_action( 'init', 'alarede_register_jobs' );
 
 /**
+ * Job categories (e.g. department or location) for filtering the Careers list.
+ */
+function alarede_register_job_category() {
+	register_taxonomy(
+		'ae_job_category',
+		'ae_job',
+		array(
+			'labels'            => array(
+				'name'          => __( 'Job Categories', 'alarede' ),
+				'singular_name' => __( 'Job Category', 'alarede' ),
+				'add_new_item'  => __( 'Add New Job Category', 'alarede' ),
+				'menu_name'     => __( 'Categories', 'alarede' ),
+			),
+			'hierarchical'      => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+			'rewrite'           => array( 'slug' => 'job-category' ),
+		)
+	);
+}
+add_action( 'init', 'alarede_register_job_category' );
+
+/**
  * Job meta box: employment details + apply link.
  */
 function alarede_job_meta_box() {

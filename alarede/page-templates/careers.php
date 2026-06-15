@@ -72,12 +72,21 @@ while ( have_posts() ) :
 			$job_query = new WP_Query(
 				array(
 					'post_type'      => 'ae_job',
-					'posts_per_page' => 20,
+					'posts_per_page' => 30,
 					'orderby'        => 'menu_order date',
 					'order'          => 'ASC',
 				)
 			);
+			$job_cats = get_terms( array( 'taxonomy' => 'ae_job_category', 'hide_empty' => true ) );
 			?>
+			<?php if ( $job_query->have_posts() && $job_cats && ! is_wp_error( $job_cats ) ) : ?>
+				<div class="ae-jobs__filters">
+					<button class="ae-jobs__filter is-active" data-filter="*"><?php esc_html_e( 'All', 'alarede' ); ?></button>
+					<?php foreach ( $job_cats as $cat ) : ?>
+						<button class="ae-jobs__filter" data-filter="<?php echo esc_attr( $cat->slug ); ?>"><?php echo esc_html( $cat->name ); ?></button>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
 			<div class="ae-jobs">
 				<?php if ( $job_query->have_posts() ) : ?>
 					<?php
@@ -85,8 +94,13 @@ while ( have_posts() ) :
 						$job_query->the_post();
 						$job_meta  = get_post_meta( get_the_ID(), '_ae_job_meta', true );
 						$apply_url = alarede_job_apply_url( get_the_ID() );
+						$terms     = get_the_terms( get_the_ID(), 'ae_job_category' );
+						$slugs     = ( $terms && ! is_wp_error( $terms ) ) ? implode( ' ', wp_list_pluck( $terms, 'slug' ) ) : '';
 						?>
-						<div class="ae-job ae-reveal">
+						<div class="ae-job ae-reveal" data-cat="<?php echo esc_attr( $slugs ); ?>">
+							<?php if ( has_post_thumbnail() ) : ?>
+								<a class="ae-job__thumb" href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'thumbnail' ); ?></a>
+							<?php endif; ?>
 							<div class="ae-job__head">
 								<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 								<?php if ( $job_meta ) : ?><span class="ae-job__meta"><?php echo esc_html( $job_meta ); ?></span><?php endif; ?>

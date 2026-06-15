@@ -657,6 +657,15 @@ p { margin: 0 0 1.5em; }
 
 /* Careers / jobs */
 .ae-jobs { max-width: 880px; margin-inline: auto; }
+.ae-jobs__filters { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; max-width: 880px; margin: 0 auto 2rem; }
+.ae-jobs__filter {
+  background: none; border: 1px solid var(--ae-color-border); padding: 0.55rem 1.3rem; cursor: pointer;
+  font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ae-color-body); transition: var(--ae-transition);
+}
+.ae-jobs__filter.is-active, .ae-jobs__filter:hover { background: var(--ae-color-accent); border-color: var(--ae-color-accent); color: #fff; }
+.ae-job.is-hidden { display: none; }
+.ae-job__thumb { flex: none; width: 84px; height: 84px; overflow: hidden; border-radius: 4px; }
+.ae-job__thumb img { width: 100%; height: 100%; object-fit: cover; }
 .ae-job {
   display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
   border: 1px solid var(--ae-color-border); padding: 1.6rem 2rem; margin-bottom: 1rem; background: #fff;
