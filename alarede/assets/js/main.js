@@ -10,6 +10,7 @@
 	document.addEventListener( 'DOMContentLoaded', function () {
 		setupHeader();
 		setupReveal();
+		setupHeroVideo();
 		setupHeroSlider();
 		setupTestimonials();
 		setupBackToTop();
@@ -17,6 +18,29 @@
 		setupFaq();
 		setupGalleryFilter();
 	} );
+
+	/* Ensure self-hosted hero videos autoplay (force muted + play). */
+	function setupHeroVideo() {
+		var videos = document.querySelectorAll( '.ae-hero__video' );
+		videos.forEach( function ( video ) {
+			video.muted = true;
+			video.setAttribute( 'muted', '' );
+			video.playsInline = true;
+			var attempt = video.play();
+			if ( attempt && typeof attempt.catch === 'function' ) {
+				attempt.catch( function () {
+					// Retry once on first user interaction if the browser blocked it.
+					var resume = function () {
+						video.play();
+						document.removeEventListener( 'click', resume );
+						document.removeEventListener( 'touchstart', resume );
+					};
+					document.addEventListener( 'click', resume, { once: true } );
+					document.addEventListener( 'touchstart', resume, { once: true } );
+				} );
+			}
+		} );
+	}
 
 	/* Hero slider: fade between slides, dots + arrows, optional autoplay. */
 	function setupHeroSlider() {

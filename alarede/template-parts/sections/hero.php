@@ -8,6 +8,50 @@
  */
 
 /**
+ * Build a muted, looping, controls-free background embed URL for YouTube/Vimeo.
+ *
+ * @param string $url Source URL.
+ * @return string Embed iframe HTML, or '' if the provider is not recognised.
+ */
+function alarede_hero_embed( $url ) {
+	// YouTube (watch, youtu.be, embed, shorts).
+	if ( preg_match( '~(?:youtube\.com/(?:watch\?v=|embed/|shorts/)|youtu\.be/)([A-Za-z0-9_-]{11})~', $url, $m ) ) {
+		$id  = $m[1];
+		$src = add_query_arg(
+			array(
+				'autoplay'       => 1,
+				'mute'           => 1,
+				'loop'           => 1,
+				'playlist'       => $id, // Required for looping a single video.
+				'controls'       => 0,
+				'showinfo'       => 0,
+				'modestbranding' => 1,
+				'playsinline'    => 1,
+				'rel'            => 0,
+			),
+			'https://www.youtube.com/embed/' . $id
+		);
+		return sprintf( '<iframe src="%s" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen title="%s"></iframe>', esc_url( $src ), esc_attr__( 'Hero video', 'alarede' ) );
+	}
+
+	// Vimeo.
+	if ( preg_match( '~vimeo\.com/(?:video/)?(\d+)~', $url, $m ) ) {
+		$src = add_query_arg(
+			array(
+				'autoplay'   => 1,
+				'muted'      => 1,
+				'loop'       => 1,
+				'background' => 1, // Clean autoplay loop, no controls.
+			),
+			'https://player.vimeo.com/video/' . $m[1]
+		);
+		return sprintf( '<iframe src="%s" frameborder="0" allow="autoplay; fullscreen" allowfullscreen title="%s"></iframe>', esc_url( $src ), esc_attr__( 'Hero video', 'alarede' ) );
+	}
+
+	return '';
+}
+
+/**
  * Render one slide's media layer.
  *
  * @param string $type      'image' or 'video'.
@@ -19,17 +63,29 @@ function alarede_hero_media( $type, $image_url, $video_url, $alt = '' ) {
 	if ( 'video' === $type && $video_url ) {
 		$ext = strtolower( pathinfo( (string) wp_parse_url( $video_url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
 		if ( in_array( $ext, array( 'mp4', 'webm', 'ogg' ), true ) ) {
+			$mime = ( 'ogg' === $ext ) ? 'ogg' : $ext;
 			printf(
-				'<video class="ae-hero__video" autoplay muted loop playsinline%1$s><source src="%2$s" type="video/%3$s"></video>',
+				'<video class="ae-hero__video" autoplay muted loop playsinline preload="auto"%1$s><source src="%2$s" type="video/%3$s"></video>',
 				$image_url ? ' poster="' . esc_url( $image_url ) . '"' : '',
 				esc_url( $video_url ),
-				esc_attr( $ext )
+				esc_attr( $mime )
 			);
 			return;
 		}
-		// Treat as an embeddable provider (YouTube / Vimeo).
-		echo '<div class="ae-hero__embed">' . wp_kses_post( wp_oembed_get( $video_url ) ) . '</div>';
-		return;
+
+		// YouTube / Vimeo background embed.
+		$embed = alarede_hero_embed( $video_url );
+		if ( $embed ) {
+			echo '<div class="ae-hero__embed">' . $embed . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from esc_url() above.
+			return;
+		}
+
+		// Last resort: let WordPress try to embed it.
+		$oembed = wp_oembed_get( $video_url );
+		if ( $oembed ) {
+			echo '<div class="ae-hero__embed">' . $oembed . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- oEmbed HTML.
+			return;
+		}
 	}
 
 	$style = $image_url
