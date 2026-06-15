@@ -14,13 +14,15 @@ $intro  = get_theme_mod( 'alarede_pricing_intro', '' );
 		<?php alarede_section_head( $kicker, $title, $intro ); ?>
 
 		<div class="ae-pricing__grid">
-			<?php for ( $n = 1; $n <= 3; $n++ ) : ?>
-				<?php
-				$p_title    = get_theme_mod( "alarede_price_{$n}_title", '' );
-				$p_amount   = get_theme_mod( "alarede_price_{$n}_amount", '' );
-				$p_unit     = get_theme_mod( "alarede_price_{$n}_unit", '' );
-				$p_features = get_theme_mod( "alarede_price_{$n}_features", '' );
-				$p_badge    = get_theme_mod( "alarede_price_{$n}_badge", '' );
+			<?php
+			$price_defaults = alarede_template_defaults( 'prices' );
+			foreach ( $price_defaults as $i => $price_d ) :
+				$n          = $i + 1;
+				$p_title    = get_theme_mod( "alarede_price_{$n}_title", $price_d[0] );
+				$p_amount   = get_theme_mod( "alarede_price_{$n}_amount", $price_d[1] );
+				$p_unit     = get_theme_mod( "alarede_price_{$n}_unit", $price_d[2] );
+				$p_features = get_theme_mod( "alarede_price_{$n}_features", $price_d[3] );
+				$p_badge    = get_theme_mod( "alarede_price_{$n}_badge", $price_d[4] );
 				if ( ! $p_title ) {
 					continue;
 				}
@@ -39,7 +41,7 @@ $intro  = get_theme_mod( 'alarede_pricing_intro', '' );
 					<?php endif; ?>
 					<a class="ae-btn <?php echo $p_badge ? 'ae-btn--solid' : ''; ?>" href="#contact"><?php esc_html_e( 'Enquire', 'alarede' ); ?></a>
 				</div>
-			<?php endfor; ?>
+			<?php endforeach; ?>
 		</div>
 	</div>
 </section>

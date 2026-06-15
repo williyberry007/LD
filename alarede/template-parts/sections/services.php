@@ -43,11 +43,13 @@ $services = new WP_Query(
 				wp_reset_postdata();
 				?>
 			<?php else : ?>
-				<?php for ( $n = 1; $n <= 3; $n++ ) : ?>
-					<?php
-					$s_icon  = get_theme_mod( "alarede_service_{$n}_icon", '✦' );
-					$s_title = get_theme_mod( "alarede_service_{$n}_title", '' );
-					$s_text  = get_theme_mod( "alarede_service_{$n}_text", '' );
+				<?php
+				$svc_defaults = alarede_template_defaults( 'services' );
+				foreach ( $svc_defaults as $i => $svc_d ) :
+					$n       = $i + 1;
+					$s_icon  = get_theme_mod( "alarede_service_{$n}_icon", $svc_d[0] );
+					$s_title = get_theme_mod( "alarede_service_{$n}_title", $svc_d[1] );
+					$s_text  = get_theme_mod( "alarede_service_{$n}_text", $svc_d[2] );
 					if ( ! $s_title ) {
 						continue;
 					}
@@ -57,7 +59,7 @@ $services = new WP_Query(
 						<h3><?php echo esc_html( $s_title ); ?></h3>
 						<p><?php echo esc_html( $s_text ); ?></p>
 					</article>
-				<?php endfor; ?>
+				<?php endforeach; ?>
 			<?php endif; ?>
 		</div>
 	</div>

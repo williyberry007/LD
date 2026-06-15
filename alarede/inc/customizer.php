@@ -164,11 +164,7 @@ function alarede_customize_register( $wp_customize ) {
 	$add_text( 'alarede_services_intro', __( 'Intro Text', 'alarede' ), __( 'From the first conversation to the final dance, we are with you every step of the way.', 'alarede' ), 'alarede_services', 'textarea' );
 
 	// Three editable service cards (fallback when no Service posts exist).
-	$service_defaults = array(
-		array( '✦', __( 'Full Planning & Design', 'alarede' ), __( 'End-to-end planning, styling and on-the-day coordination tailored entirely to your vision.', 'alarede' ) ),
-		array( '❀', __( 'Venue Sourcing', 'alarede' ), __( 'We listen to your vision, present tailored venue options and guide you to the perfect setting.', 'alarede' ) ),
-		array( '♛', __( 'Event Coordination', 'alarede' ), __( 'Seamless coordination so you can be fully present and enjoy every precious moment.', 'alarede' ) ),
-	);
+	$service_defaults = alarede_template_defaults( 'services' );
 	foreach ( $service_defaults as $i => $svc ) {
 		$n = $i + 1;
 		$add_text( "alarede_service_{$n}_icon", sprintf( __( 'Card %d — Icon', 'alarede' ), $n ), $svc[0], 'alarede_services' );
@@ -196,11 +192,7 @@ function alarede_customize_register( $wp_customize ) {
 	$add_text( 'alarede_pricing_title', __( 'Title', 'alarede' ), __( 'Planning Packages', 'alarede' ), 'alarede_pricing' );
 	$add_text( 'alarede_pricing_intro', __( 'Intro Text', 'alarede' ), __( 'Transparent, flexible packages designed around your celebration.', 'alarede' ), 'alarede_pricing', 'textarea' );
 
-	$price_defaults = array(
-		array( __( 'Coordination', 'alarede' ), '2,000€', __( 'Flat fee', 'alarede' ), "Pre-event planning support\nTimeline & supplier liaison\nFull on-the-day coordination", '' ),
-		array( __( 'Full Planning', 'alarede' ), '15%', __( 'Of sourced services', 'alarede' ), "Everything in Coordination\nVenue sourcing & negotiation\nBespoke design & styling\nUnlimited consultations", __( 'Most Popular', 'alarede' ) ),
-		array( __( 'Bespoke', 'alarede' ), 'POA', __( 'Tailored', 'alarede' ), "Multi-day celebrations\nDestination logistics\nDedicated lead planner", '' ),
-	);
+	$price_defaults = alarede_template_defaults( 'prices' );
 	foreach ( $price_defaults as $i => $price ) {
 		$n = $i + 1;
 		$add_text( "alarede_price_{$n}_title", sprintf( __( 'Plan %d — Name', 'alarede' ), $n ), $price[0], 'alarede_pricing' );

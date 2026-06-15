@@ -93,6 +93,16 @@ function alarede_mod( $key, $default = '' ) {
  */
 function alarede_template_defaults( $group = '' ) {
 	$defaults = array(
+		'services' => array(
+			array( '✦', __( 'Full Planning & Design', 'alarede' ), __( 'End-to-end planning, styling and on-the-day coordination tailored entirely to your vision.', 'alarede' ) ),
+			array( '❀', __( 'Venue Sourcing', 'alarede' ), __( 'We listen to your vision, present tailored venue options and guide you to the perfect setting.', 'alarede' ) ),
+			array( '♛', __( 'Event Coordination', 'alarede' ), __( 'Seamless coordination so you can be fully present and enjoy every precious moment.', 'alarede' ) ),
+		),
+		'prices'   => array(
+			array( __( 'Coordination', 'alarede' ), '2,000€', __( 'Flat fee', 'alarede' ), "Pre-event planning support\nTimeline & supplier liaison\nFull on-the-day coordination", '' ),
+			array( __( 'Full Planning', 'alarede' ), '15%', __( 'Of sourced services', 'alarede' ), "Everything in Coordination\nVenue sourcing & negotiation\nBespoke design & styling\nUnlimited consultations", __( 'Most Popular', 'alarede' ) ),
+			array( __( 'Bespoke', 'alarede' ), 'POA', __( 'Tailored', 'alarede' ), "Multi-day celebrations\nDestination logistics\nDedicated lead planner", '' ),
+		),
 		'events'  => array(
 			array( __( 'Introductions', 'alarede' ), __( 'A graceful first gathering of two families, planned and hosted with warmth and tradition.', 'alarede' ) ),
 			array( __( 'Engagements', 'alarede' ), __( 'Memorable engagement celebrations and proposals, styled and coordinated end to end.', 'alarede' ) ),
