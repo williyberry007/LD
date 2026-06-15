@@ -10,7 +10,7 @@ get_header();
 $is_portfolio = is_post_type_archive( 'ae_portfolio' ) || is_tax( 'ae_portfolio_category' );
 ?>
 
-<div class="ae-page-header">
+<div class="ae-page-header"<?php alarede_page_header_style(); ?>>
 	<div class="ae-container">
 		<span class="ae-breadcrumb"><?php bloginfo( 'name' ); ?></span>
 		<?php the_archive_title( '<h1>', '</h1>' ); ?>

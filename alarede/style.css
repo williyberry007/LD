@@ -366,7 +366,11 @@ p { margin: 0 0 1.5em; }
    12. Blog / pages / single
    ========================================================= */
 .ae-page-header {
-  background: var(--ae-color-dark); color: #fff; text-align: center;
+  background-color: var(--ae-color-dark); color: #fff; text-align: center;
+  background-image:
+    radial-gradient(120% 140% at 50% 0%, rgba(183,150,90,0.22), transparent 55%),
+    linear-gradient(160deg, #26251f 0%, #3a352b 55%, #1c1c1a 100%);
+  background-size: cover; background-position: center;
   padding: clamp(7rem, 14vw, 11rem) 0 clamp(3rem, 6vw, 5rem);
 }
 .ae-page-header h1 { color: #fff; }

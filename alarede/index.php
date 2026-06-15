@@ -8,7 +8,7 @@
 get_header();
 ?>
 
-<div class="ae-page-header">
+<div class="ae-page-header"<?php alarede_page_header_style(); ?>>
 	<div class="ae-container">
 		<?php if ( is_home() && ! is_front_page() ) : ?>
 			<span class="ae-breadcrumb"><?php esc_html_e( 'Journal', 'alarede' ); ?></span>

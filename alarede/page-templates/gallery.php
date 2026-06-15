@@ -27,7 +27,7 @@ while ( have_posts() ) :
 	the_post();
 	?>
 
-	<div class="ae-page-header">
+	<div class="ae-page-header"<?php alarede_page_header_style(); ?>>
 		<div class="ae-container">
 			<span class="ae-breadcrumb"><?php esc_html_e( 'Gallery', 'alarede' ); ?></span>
 			<h1><?php echo esc_html( get_the_title() ? get_the_title() : __( 'Media Gallery', 'alarede' ) ); ?></h1>

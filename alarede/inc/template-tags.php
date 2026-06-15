@@ -171,6 +171,34 @@ function alarede_get_list( $prefix, $group ) {
 }
 
 /**
+ * Echo the inline style attribute for an .ae-page-header banner.
+ *
+ * Priority: the post's featured image (on singular views, when allowed) →
+ * the Customizer "Default Page Header Image" → no inline style, so the CSS
+ * gradient default applies. An image always gets a dark overlay so the white
+ * heading stays readable.
+ *
+ * @param bool $use_featured Whether to use the current post's featured image.
+ */
+function alarede_page_header_style( $use_featured = true ) {
+	$image = '';
+	if ( $use_featured && is_singular() && has_post_thumbnail() ) {
+		$image = get_the_post_thumbnail_url( null, 'full' );
+	}
+	if ( ! $image ) {
+		$image = get_theme_mod( 'alarede_page_header_image', '' );
+	}
+	if ( ! $image ) {
+		return; // Fall back to the CSS gradient default.
+	}
+	$style = sprintf(
+		'background-image:linear-gradient(rgba(20,20,18,.55),rgba(20,20,18,.7)),url(%s);background-size:cover;background-position:center;',
+		esc_url( $image )
+	);
+	echo ' style="' . esc_attr( $style ) . '"';
+}
+
+/**
  * Output a section heading block (kicker + title + intro).
  *
  * @param string $kicker Small overline label.

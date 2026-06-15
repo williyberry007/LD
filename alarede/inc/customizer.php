@@ -303,6 +303,19 @@ function alarede_customize_register( $wp_customize ) {
 	$add_text( 'alarede_font_body', __( 'Body Font Stack', 'alarede' ), '"Montserrat", Arial, sans-serif', 'alarede_typography' );
 
 	/* ===============================================================
+	 * PAGE HEADER
+	 * =============================================================== */
+	$wp_customize->add_section(
+		'alarede_page_header',
+		array(
+			'title'       => __( 'Page Header', 'alarede' ),
+			'priority'    => 31,
+			'description' => __( 'Default banner image shown behind inner page titles (blog, archives, and pages without a Featured Image). A dark overlay is applied automatically. A page’s own Featured Image takes priority.', 'alarede' ),
+		)
+	);
+	$add_image( 'alarede_page_header_image', __( 'Default Header Image', 'alarede' ), 'alarede_page_header' );
+
+	/* ===============================================================
 	 * SOCIAL & FOOTER
 	 * =============================================================== */
 	$wp_customize->add_section( 'alarede_social', array( 'title' => __( 'Social & Footer', 'alarede' ), 'priority' => 32 ) );

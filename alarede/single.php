@@ -10,7 +10,7 @@ get_header();
 
 <?php while ( have_posts() ) : the_post(); ?>
 
-	<div class="ae-page-header" <?php echo has_post_thumbnail() ? 'style="background-image:linear-gradient(rgba(20,20,18,.6),rgba(20,20,18,.6)),url(' . esc_url( get_the_post_thumbnail_url( null, 'full' ) ) . ');background-size:cover;background-position:center;"' : ''; ?>>
+	<div class="ae-page-header"<?php alarede_page_header_style(); ?>>
 		<div class="ae-container">
 			<span class="ae-breadcrumb"><?php echo esc_html( get_post_type() === 'post' ? __( 'Journal', 'alarede' ) : get_post_type_object( get_post_type() )->labels->singular_name ); ?></span>
 			<h1><?php the_title(); ?></h1>

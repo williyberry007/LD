@@ -17,7 +17,7 @@ while ( have_posts() ) :
 	$portrait = has_post_thumbnail() ? get_the_post_thumbnail_url( null, 'large' ) : 'https://placehold.co/600x760/efe9dd/b7965a?text=Portrait';
 	?>
 
-	<div class="ae-page-header">
+	<div class="ae-page-header"<?php alarede_page_header_style( false ); ?>>
 		<div class="ae-container">
 			<span class="ae-breadcrumb"><?php esc_html_e( 'About', 'alarede' ); ?></span>
 			<h1><?php the_title(); ?></h1>

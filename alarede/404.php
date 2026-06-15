@@ -8,7 +8,7 @@
 get_header();
 ?>
 
-<div class="ae-page-header">
+<div class="ae-page-header"<?php alarede_page_header_style(); ?>>
 	<div class="ae-container">
 		<span class="ae-breadcrumb"><?php esc_html_e( 'Error 404', 'alarede' ); ?></span>
 		<h1><?php esc_html_e( 'This page has wandered off.', 'alarede' ); ?></h1>

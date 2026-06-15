@@ -59,6 +59,7 @@ video, plus a slider autoplay speed).
 | **Front Page Sections → Pricing** | 3 packages with features, price, badge |
 | **Front Page Sections → Testimonials** | Background, heading (Testimonial posts) |
 | **Front Page Sections → Contact** | Email, phone, address, form shortcode, map embed |
+| **Page Header** | Default banner image (with overlay) behind inner page titles; a page's own Featured Image takes priority |
 | **Theme Colours** | Accent / dark / cream (live preview) |
 | **Typography** | Heading & body font stacks |
 | **Social & Footer** | Instagram, Facebook, Pinterest, YouTube, copyright |
