@@ -12,17 +12,8 @@
 
 get_header();
 
-$values = array(
-	array( __( 'Craft', 'alarede' ), __( 'We sweat the details so every celebration feels effortless.', 'alarede' ) ),
-	array( __( 'Care', 'alarede' ), __( 'We look after our clients and each other with genuine warmth.', 'alarede' ) ),
-	array( __( 'Growth', 'alarede' ), __( 'We invest in learning, mentorship and creative freedom.', 'alarede' ) ),
-);
-
-$jobs = array(
-	array( __( 'Event Planner', 'alarede' ), __( 'Full-time · Hybrid', 'alarede' ) ),
-	array( __( 'Junior Coordinator', 'alarede' ), __( 'Full-time · On-site', 'alarede' ) ),
-	array( __( 'Academy Instructor', 'alarede' ), __( 'Part-time · Flexible', 'alarede' ) ),
-);
+$values = alarede_get_list( 'alarede_careers_value', 'values' );
+$jobs   = alarede_get_list( 'alarede_careers_job', 'jobs' );
 
 while ( have_posts() ) :
 	the_post();
@@ -51,7 +42,12 @@ while ( have_posts() ) :
 
 	<section class="ae-section ae-section--cream">
 		<div class="ae-container">
-			<?php alarede_section_head( __( 'Life Here', 'alarede' ), __( 'What We Value', 'alarede' ) ); ?>
+			<?php
+			alarede_section_head(
+				get_theme_mod( 'alarede_careers_values_kicker', __( 'Life Here', 'alarede' ) ),
+				get_theme_mod( 'alarede_careers_values_title', __( 'What We Value', 'alarede' ) )
+			);
+			?>
 			<div class="ae-features">
 				<?php foreach ( $values as $i => $v ) : ?>
 					<div class="ae-feature ae-reveal">
@@ -66,7 +62,12 @@ while ( have_posts() ) :
 
 	<section class="ae-section">
 		<div class="ae-container">
-			<?php alarede_section_head( __( 'Open Roles', 'alarede' ), __( 'Current Openings', 'alarede' ) ); ?>
+			<?php
+			alarede_section_head(
+				get_theme_mod( 'alarede_careers_jobs_kicker', __( 'Open Roles', 'alarede' ) ),
+				get_theme_mod( 'alarede_careers_jobs_title', __( 'Current Openings', 'alarede' ) )
+			);
+			?>
 			<div class="ae-jobs">
 				<?php foreach ( $jobs as $job ) : ?>
 					<div class="ae-job ae-reveal">

@@ -236,6 +236,60 @@ function alarede_customize_register( $wp_customize ) {
 	$wp_customize->add_control( 'alarede_contact_map', array( 'label' => __( 'Map Embed (optional)', 'alarede' ), 'description' => __( 'Paste a Google Maps embed <iframe> to show a map on the Contact page template.', 'alarede' ), 'section' => 'alarede_contact', 'type' => 'textarea' ) );
 
 	/* ===============================================================
+	 * PAGE TEMPLATES (editable lists)
+	 * =============================================================== */
+	$wp_customize->add_panel(
+		'alarede_pages',
+		array(
+			'title'       => __( 'Page Templates', 'alarede' ),
+			'description' => __( 'Edit the lists shown on the Events, Academy, Careers and FAQ page templates. Leave an item’s title blank to hide it.', 'alarede' ),
+			'priority'    => 25,
+		)
+	);
+
+	$tpl_defaults = alarede_template_defaults();
+
+	// Helper: register a section heading (kicker/title/intro).
+	$add_heading = function ( $section, $kicker, $title, $intro = '' ) use ( $wp_customize, $add_text ) {
+		$prefix = $section;
+		$add_text( "{$prefix}_kicker", __( 'Overline Text', 'alarede' ), $kicker, $section );
+		$add_text( "{$prefix}_title", __( 'Section Title', 'alarede' ), $title, $section );
+		if ( false !== $intro ) {
+			$add_text( "{$prefix}_intro", __( 'Intro Text', 'alarede' ), $intro, $section, 'textarea' );
+		}
+	};
+
+	// Helper: register a title+text list seeded from defaults.
+	$add_list = function ( $section, $item_prefix, $rows, $title_label, $text_label, $text_type = 'textarea' ) use ( $wp_customize, $add_text ) {
+		foreach ( $rows as $i => $row ) {
+			$n = $i + 1;
+			$add_text( "{$item_prefix}_{$n}_title", sprintf( '%s %d — %s', __( 'Item', 'alarede' ), $n, $title_label ), $row[0], $section );
+			$add_text( "{$item_prefix}_{$n}_text", sprintf( '%s %d — %s', __( 'Item', 'alarede' ), $n, $text_label ), isset( $row[1] ) ? $row[1] : '', $section, $text_type );
+		}
+	};
+
+	// --- Events ----------------------------------------------------------
+	$wp_customize->add_section( 'alarede_events', array( 'title' => __( 'Events Page', 'alarede' ), 'panel' => 'alarede_pages' ) );
+	$add_heading( 'alarede_events', __( 'What We Offer', 'alarede' ), __( 'Event Services', 'alarede' ), __( 'Bespoke planning and coordination for every milestone celebration.', 'alarede' ) );
+	$add_list( 'alarede_events', 'alarede_events_item', $tpl_defaults['events'], __( 'Name', 'alarede' ), __( 'Description', 'alarede' ) );
+
+	// --- Academy ---------------------------------------------------------
+	$wp_customize->add_section( 'alarede_academy', array( 'title' => __( 'Academy Page', 'alarede' ), 'panel' => 'alarede_pages' ) );
+	$add_heading( 'alarede_academy', __( 'Courses', 'alarede' ), __( 'What You Can Learn', 'alarede' ), __( 'Practical, hands-on training across our full range of specialities.', 'alarede' ) );
+	$add_list( 'alarede_academy', 'alarede_academy_item', $tpl_defaults['academy'], __( 'Course', 'alarede' ), __( 'Description', 'alarede' ) );
+
+	// --- Careers ---------------------------------------------------------
+	$wp_customize->add_section( 'alarede_careers', array( 'title' => __( 'Careers Page', 'alarede' ), 'panel' => 'alarede_pages' ) );
+	$add_heading( 'alarede_careers_values', __( 'Life Here', 'alarede' ), __( 'What We Value', 'alarede' ), false );
+	$add_list( 'alarede_careers', 'alarede_careers_value', $tpl_defaults['values'], __( 'Value', 'alarede' ), __( 'Description', 'alarede' ) );
+	$add_heading( 'alarede_careers_jobs', __( 'Open Roles', 'alarede' ), __( 'Current Openings', 'alarede' ), false );
+	$add_list( 'alarede_careers', 'alarede_careers_job', $tpl_defaults['jobs'], __( 'Role', 'alarede' ), __( 'Detail (e.g. Full-time · Hybrid)', 'alarede' ), 'text' );
+
+	// --- FAQ -------------------------------------------------------------
+	$wp_customize->add_section( 'alarede_faq', array( 'title' => __( 'FAQ Page', 'alarede' ), 'panel' => 'alarede_pages' ) );
+	$add_list( 'alarede_faq', 'alarede_faq_item', $tpl_defaults['faqs'], __( 'Question', 'alarede' ), __( 'Answer', 'alarede' ) );
+
+	/* ===============================================================
 	 * COLOURS
 	 * =============================================================== */
 	$wp_customize->add_section( 'alarede_colors', array( 'title' => __( 'Theme Colours', 'alarede' ), 'priority' => 30 ) );

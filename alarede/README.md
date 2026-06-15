@@ -82,9 +82,11 @@ Assign these from **Page → Page Attributes → Template**:
 | **Full Width (No Sidebar)** | Clean, centered content |
 | **Landing (Homepage Sections)** | Reuse the homepage sections on any page |
 
-The Events/Academy/Careers/FAQ lists live in a small `$array` near the top of
-each template, so you can edit the items directly if you prefer code, or use
-the page editor for the surrounding copy.
+The Events, Academy, Careers and FAQ list items are editable without code in
+**Customize → Page Templates** (Events Page, Academy Page, Careers Page, FAQ
+Page). Each item has a title and description (or question/answer); leave a
+title blank to hide that item. Section headings (overline/title/intro) are
+editable there too.
 
 ## Content types
 

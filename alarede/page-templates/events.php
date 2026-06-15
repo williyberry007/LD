@@ -12,14 +12,7 @@
 
 get_header();
 
-$services = array(
-	array( __( 'Introductions', 'alarede' ), __( 'A graceful first gathering of two families, planned and hosted with warmth and tradition.', 'alarede' ) ),
-	array( __( 'Engagements', 'alarede' ), __( 'Memorable engagement celebrations and proposals, styled and coordinated end to end.', 'alarede' ) ),
-	array( __( 'Wedding Reception', 'alarede' ), __( 'Seamless receptions — design, flow, catering liaison and on-the-day management.', 'alarede' ) ),
-	array( __( 'MC', 'alarede' ), __( 'Professional master-of-ceremonies services to keep your celebration flowing beautifully.', 'alarede' ) ),
-	array( __( 'Weddings', 'alarede' ), __( 'Full wedding planning and design, from concept to the final farewell.', 'alarede' ) ),
-	array( __( 'Marriage Counselling', 'alarede' ), __( 'Caring, professional guidance to help couples build a strong foundation for marriage.', 'alarede' ) ),
-);
+$services = alarede_get_list( 'alarede_events_item', 'events' );
 
 while ( have_posts() ) :
 	the_post();
@@ -42,7 +35,13 @@ while ( have_posts() ) :
 
 	<section class="ae-section <?php echo trim( get_the_content() ) ? 'ae-section--cream' : ''; ?>">
 		<div class="ae-container">
-			<?php alarede_section_head( __( 'What We Offer', 'alarede' ), __( 'Event Services', 'alarede' ), __( 'Bespoke planning and coordination for every milestone celebration.', 'alarede' ) ); ?>
+			<?php
+			alarede_section_head(
+				get_theme_mod( 'alarede_events_kicker', __( 'What We Offer', 'alarede' ) ),
+				get_theme_mod( 'alarede_events_title', __( 'Event Services', 'alarede' ) ),
+				get_theme_mod( 'alarede_events_intro', __( 'Bespoke planning and coordination for every milestone celebration.', 'alarede' ) )
+			);
+			?>
 			<div class="ae-features">
 				<?php foreach ( $services as $i => $s ) : ?>
 					<div class="ae-feature ae-reveal">

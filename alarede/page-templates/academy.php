@@ -11,14 +11,7 @@
 
 get_header();
 
-$courses = array(
-	array( __( 'Event Mastery', 'alarede' ), __( 'Everything we do in events — planning, design, coordination and hosting — taught hands-on.', 'alarede' ) ),
-	array( __( 'Gele', 'alarede' ), __( 'The art of tying elegant gele headwraps for brides, guests and special occasions.', 'alarede' ) ),
-	array( __( 'Makeup', 'alarede' ), __( 'Professional bridal and occasion makeup techniques, from flawless base to finishing touches.', 'alarede' ) ),
-	array( __( 'Gift Wrapping', 'alarede' ), __( 'Creative, luxurious gift presentation and packaging for every celebration.', 'alarede' ) ),
-	array( __( 'Eru-Iyawo Wrapping', 'alarede' ), __( 'Traditional bridal trousseau arrangement and presentation, taught with cultural authenticity.', 'alarede' ) ),
-	array( __( 'Letters (Proposal & Acceptance)', 'alarede' ), __( 'Composing the traditional proposal and acceptance letters with the proper etiquette and tone.', 'alarede' ) ),
-);
+$courses = alarede_get_list( 'alarede_academy_item', 'academy' );
 
 while ( have_posts() ) :
 	the_post();
@@ -47,7 +40,13 @@ while ( have_posts() ) :
 
 	<section class="ae-section ae-section--cream">
 		<div class="ae-container">
-			<?php alarede_section_head( __( 'Courses', 'alarede' ), __( 'What You Can Learn', 'alarede' ), __( 'Practical, hands-on training across our full range of specialities.', 'alarede' ) ); ?>
+			<?php
+			alarede_section_head(
+				get_theme_mod( 'alarede_academy_kicker', __( 'Courses', 'alarede' ) ),
+				get_theme_mod( 'alarede_academy_title', __( 'What You Can Learn', 'alarede' ) ),
+				get_theme_mod( 'alarede_academy_intro', __( 'Practical, hands-on training across our full range of specialities.', 'alarede' ) )
+			);
+			?>
 			<div class="ae-features">
 				<?php foreach ( $courses as $i => $c ) : ?>
 					<div class="ae-feature ae-reveal">

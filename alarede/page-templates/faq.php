@@ -11,28 +11,7 @@
 
 get_header();
 
-$faqs = array(
-	array(
-		__( 'How far in advance should we book?', 'alarede' ),
-		__( 'We recommend reaching out as early as possible — popular dates and venues are reserved well ahead. We accept a limited number of events each year to give every couple our full attention.', 'alarede' ),
-	),
-	array(
-		__( 'How do your fees work?', 'alarede' ),
-		__( 'Coordination is offered for a flat fee, and full planning typically includes a percentage of the services we source and manage on your behalf. We provide a clear, tailored proposal after our first conversation.', 'alarede' ),
-	),
-	array(
-		__( 'Do you travel for destination events?', 'alarede' ),
-		__( 'Yes. We plan and coordinate destination celebrations and handle the logistics so you can simply enjoy the experience.', 'alarede' ),
-	),
-	array(
-		__( 'Can you work with our existing suppliers?', 'alarede' ),
-		__( 'Absolutely. We are happy to collaborate with vendors you love, and can recommend trusted partners where needed.', 'alarede' ),
-	),
-	array(
-		__( 'Do you offer training through the Academy?', 'alarede' ),
-		__( 'Yes — our Academy teaches event skills, gele, makeup, gift wrapping, eru-iyawo wrapping and traditional letters. Contact us for the next intake.', 'alarede' ),
-	),
-);
+$faqs = alarede_get_list( 'alarede_faq_item', 'faqs' );
 
 while ( have_posts() ) :
 	the_post();
