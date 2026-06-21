@@ -295,15 +295,23 @@ function openDetail() {
   status.dataset.tone = p.status === "Sold Out" ? "sold" : p.status === "Under Construction" ? "construction" : "selling";
   $("enquiryDone").hidden = true;
   $("enquiryForm").reset();
+  clearTimeout(detailCloseTimer);
+  detail.classList.remove("is-closing");
   detail.classList.add("is-open");
   detail.setAttribute("aria-hidden", "false");
   $("detailClose").focus();
   playTick();
 }
 
+let detailCloseTimer;
 function closeDetail() {
+  if (!detail.classList.contains("is-open")) return;
+  const dur = parseFloat(getComputedStyle(detail).getPropertyValue("--modal-close-dur")) || 150;
   detail.classList.remove("is-open");
+  detail.classList.add("is-closing");
   detail.setAttribute("aria-hidden", "true");
+  clearTimeout(detailCloseTimer);
+  detailCloseTimer = setTimeout(() => detail.classList.remove("is-closing"), dur);
 }
 
 $("cardCta").addEventListener("click", (e) => { e.preventDefault(); openDetail(); });
