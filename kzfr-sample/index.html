@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KZFR Homepage Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a community-radio front page. Utility bar, header, split hero (headline + on-air card) over an FM dial strip,
+   then schedule / archive / calendar / support bands, with a persistent live player docked at the bottom. */
+:root {
+  --paper: #f2f5ef;
+  --card: #ffffff;
+  --ink: #10231a;
+  --muted: #4a5e53;
+  --line: #d2dccf;
+  --green: #0b6b3b;
+  --green-deep: #07452a;
+  --on-green: #ffffff;
+  --sun: #f2b705;
+  --on-sun: #1b1600;
+  --tint: #e3ede2;
+
+  --display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", Verdana, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --radius: 6px;
+  --wrap: 1180px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0c1610; --card: #13221a; --ink: #e6efe8; --muted: #9db2a5; --line: #243a2d;
+    --green: #3fb672; --green-deep: #0f2f1e; --on-green: #06140c; --sun: #f5c542; --on-sun: #1b1600; --tint: #172a1f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0c1610; --card: #13221a; --ink: #e6efe8; --muted: #9db2a5; --line: #243a2d;
+  --green: #3fb672; --green-deep: #0f2f1e; --on-green: #06140c; --sun: #f5c542; --on-sun: #1b1600; --tint: #172a1f;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.6 var(--body);
+  padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+}
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; border-radius: 3px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.05; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); font-weight: 800; font-stretch: 112%; letter-spacing: -0.01em; }
+h3 { font-size: 1.15rem; font-weight: 700; }
+p { margin: 0; }
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: 20px; }
+.eyebrow {
+  font: 600 0.75rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--green);
+}
+.skip { position: absolute; left: 12px; top: -60px; background: var(--sun); color: var(--on-sun); padding: 10px 14px; z-index: 50; font-weight: 700; }
+.skip:focus { top: 12px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; justify-content: center;
+  font: 700 0.95rem/1 var(--body); padding: 13px 20px; border-radius: 999px;
+  border: 2px solid transparent; cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: transform .15s ease, background .15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-sun { background: var(--sun); color: var(--on-sun); }
+.btn-green { background: var(--green); color: var(--on-green); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+
+/* concept ribbon */
+.concept {
+  background: var(--ink); color: var(--paper); font: 0.8rem/1.4 var(--mono);
+  padding-block: 8px; text-align: center;
+}
+.concept .wrap { display: flex; gap: 6px 14px; flex-wrap: wrap; justify-content: center; }
+
+/* header */
+header.site {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+}
+.bar { display: flex; align-items: center; gap: 20px; padding-block: 12px; }
+.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.logo-mark {
+  display: grid; place-items: center; width: 62px; height: 42px; border-radius: 50%;
+  background: var(--green); color: var(--on-green); border: 3px solid var(--ink);
+  font: 900 1.05rem/1 var(--display); font-stretch: 75%; font-style: italic; letter-spacing: -0.02em;
+}
+.logo-text { display: grid; line-height: 1.1; }
+.logo-text b { font: 800 1.05rem/1.1 var(--display); font-stretch: 110%; }
+.logo-text span { font: 0.72rem/1.2 var(--mono); color: var(--muted); }
+nav.primary { margin-left: auto; }
+nav.primary ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+nav.primary a {
+  display: block; padding: 8px 11px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 0.93rem;
+}
+nav.primary a:hover { background: var(--tint); }
+.bar .btn-sun { padding: 10px 16px; }
+.menu-btn { display: none; margin-left: auto; background: none; border: 2px solid var(--line); border-radius: 999px; color: var(--ink); font: 700 0.9rem var(--body); padding: 8px 14px; cursor: pointer; }
+@media (max-width: 980px) {
+  .menu-btn { display: inline-flex; }
+  nav.primary { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--paper); border-bottom: 1px solid var(--line); margin: 0; }
+  nav.primary.open { display: block; }
+  nav.primary ul { flex-direction: column; padding: 8px 20px 16px; }
+  nav.primary a { padding: 12px 8px; border-radius: 4px; }
+  .bar .btn-sun { display: none; }
+}
+
+/* hero */
+.hero { padding-block: 48px 0; }
+.hero-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: end; }
+.hero h1 {
+  font-size: clamp(2.6rem, 6.4vw, 5.2rem); font-weight: 900; font-stretch: 118%; letter-spacing: -0.025em;
+  margin-top: 14px;
+}
+.hero h1 em { font-style: normal; color: var(--green); }
+.hero .lede { margin-top: 18px; max-width: 34em; font-size: 1.12rem; color: var(--muted); }
+.hero .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+
+.onair {
+  background: var(--green-deep); color: #f0f7f2; border-radius: 14px; padding: 22px;
+  display: grid; gap: 14px; position: relative; overflow: hidden;
+}
+:root[data-theme="dark"] .onair, .onair { color: #f0f7f2; }
+.onair .live { display: inline-flex; align-items: center; gap: 8px; font: 600 0.75rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sun); }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #ff5a4e; box-shadow: 0 0 0 0 rgba(255,90,78,.6); animation: pulse 1.8s infinite; }
+@keyframes pulse { 70% { box-shadow: 0 0 0 10px rgba(255,90,78,0); } 100% { box-shadow: 0 0 0 0 rgba(255,90,78,0); } }
+.onair h3 { font-size: 1.7rem; font-weight: 800; font-stretch: 108%; color: #fff; }
+.onair .host { color: #b9d6c4; }
+.onair-row { display: flex; align-items: center; gap: 14px; }
+.big-play {
+  width: 64px; height: 64px; flex: none; border-radius: 50%; border: 0; cursor: pointer;
+  background: var(--sun); color: #1b1600; display: grid; place-items: center;
+}
+.big-play svg { width: 26px; height: 26px; }
+.meter { display: flex; align-items: flex-end; gap: 3px; height: 34px; flex: 1; min-width: 0; }
+.meter i { flex: 1; background: #3fb672; border-radius: 2px; height: 20%; opacity: .55; }
+.playing .meter i { animation: lvl 0.9s ease-in-out infinite alternate; opacity: 1; }
+@keyframes lvl { from { height: 15%; } to { height: 100%; } }
+.next { border-top: 1px solid rgba(255,255,255,.15); padding-top: 12px; font-size: .9rem; color: #b9d6c4; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.next b { color: #fff; }
+
+/* FM dial */
+.dial { margin-top: 40px; border-block: 2px solid var(--ink); padding-block: 12px 8px; position: relative; overflow: hidden; }
+.dial-scale { display: flex; justify-content: space-between; font: 0.72rem var(--mono); color: var(--muted); }
+.ticks { height: 22px; margin-top: 4px;
+  background-image: repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 100%);
+  background-size: calc(100% / 100) 10px; background-repeat: repeat-x; background-position: bottom;
+  border-bottom: 1px solid var(--ink); opacity: .55;
+}
+.needle {
+  position: absolute; top: 0; bottom: 0; width: 3px; background: #e2382d;
+  left: calc((90.1 - 88) / 20 * 100%);
+}
+.needle span {
+  position: absolute; top: 8px; left: 8px; white-space: nowrap; background: #e2382d; color: #fff;
+  font: 600 0.75rem var(--mono); padding: 3px 7px; border-radius: 3px;
+}
+.dial-note { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 0.75rem var(--mono); color: var(--muted); margin-top: 8px; }
+
+/* quick paths */
+.paths { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-top: 40px; }
+.paths a { background: var(--card); padding: 20px; text-decoration: none; display: grid; gap: 6px; transition: background .15s; }
+.paths a:hover { background: var(--tint); }
+.paths b { font: 800 1.1rem var(--display); font-stretch: 108%; }
+.paths span { color: var(--muted); font-size: .92rem; }
+
+section.band { padding-block: 72px 0; }
+.band-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
+.band-head p { color: var(--muted); max-width: 40em; margin-top: 8px; }
+.band-head a.more { font-weight: 700; color: var(--green); }
+
+/* schedule */
+.sched { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.slot { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 4px; align-content: start; }
+.slot time { font: 600 0.82rem var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.slot .cat { font-size: .8rem; color: var(--muted); }
+.slot.now { background: var(--green); border-color: var(--green); color: var(--on-green); }
+.slot.now time, .slot.now .cat { color: inherit; opacity: .85; }
+.slot.now::before { content: "On air now"; font: 600 0.7rem var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+
+/* archive */
+.archive { display: grid; grid-template-columns: 260px 1fr; gap: 28px; align-items: start; }
+.filters { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: grid; gap: 16px; position: sticky; top: 90px; }
+.filters label, .filters legend { font: 600 0.75rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 6px; padding: 0; }
+.filters fieldset { border: 0; margin: 0; padding: 0; }
+.filters input[type=search], .filters select {
+  width: 100%; font: 1rem var(--body); padding: 10px 12px; border-radius: var(--radius);
+  border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+}
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  font: 700 .85rem var(--body); padding: 7px 12px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+}
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.results-meta { font: .85rem var(--mono); color: var(--muted); margin-bottom: 10px; }
+.ep-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.ep { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; padding: 14px 4px; border-bottom: 1px solid var(--line); }
+.ep-play { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--green); background: transparent; color: var(--green); cursor: pointer; display: grid; place-items: center; }
+.ep-play svg { width: 16px; height: 16px; }
+.ep-play[aria-pressed="true"] { background: var(--green); color: var(--on-green); }
+.ep-main { min-width: 0; }
+.ep-main b { display: block; font-size: 1.02rem; }
+.ep-main span { color: var(--muted); font-size: .9rem; }
+.tag { font: 600 .7rem var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; background: var(--tint); color: var(--green); white-space: nowrap; }
+.ep-side { text-align: right; display: grid; gap: 4px; justify-items: end; }
+.ep-side time { font: .8rem var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.empty { padding: 28px 4px; color: var(--muted); }
+
+/* events */
+.events { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+.event { display: grid; grid-template-columns: 64px 1fr; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+.cal { border: 2px solid var(--ink); border-radius: 6px; text-align: center; overflow: hidden; align-self: start; }
+.cal span { display: block; background: var(--ink); color: var(--paper); font: 600 .7rem var(--mono); letter-spacing: .1em; padding: 3px 0; }
+.cal b { display: block; font: 900 1.6rem/1.3 var(--display); }
+.event p { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+
+/* support */
+.support { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; }
+.give { background: var(--sun); color: var(--on-sun); border-radius: 14px; padding: 28px; display: grid; gap: 16px; }
+.give h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); }
+.amounts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.amt { font: 800 1.1rem var(--display); padding: 14px 0; border-radius: var(--radius); border: 2px solid #1b1600; background: transparent; color: #1b1600; cursor: pointer; }
+.amt[aria-pressed="true"] { background: #1b1600; color: #f2b705; }
+.freq { display: flex; gap: 18px; flex-wrap: wrap; font-weight: 700; }
+.freq label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.give .btn { background: #1b1600; color: #f2b705; justify-self: start; }
+.give-msg { font-weight: 700; min-height: 1.6em; }
+.side-cards { display: grid; gap: 20px; }
+.side { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 24px; display: grid; gap: 10px; }
+.side p { color: var(--muted); }
+.side a { font-weight: 700; color: var(--green); }
+
+/* underwriters */
+.uw { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.uw div { background: var(--card); padding: 22px 16px; text-align: center; font: 700 .95rem var(--display); font-stretch: 90%; color: var(--muted); }
+
+footer { margin-top: 80px; background: var(--green-deep); color: #dcebe1; padding-block: 48px; }
+footer .cols { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 28px; }
+footer h3 { color: #fff; margin-bottom: 10px; font-size: 1rem; }
+footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+footer a { color: #dcebe1; }
+footer .fine { margin-top: 36px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.15); font: .78rem var(--mono); color: #a8c4b2; }
+
+/* persistent player */
+.player {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  background: var(--ink); color: var(--paper);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.player .wrap { display: flex; align-items: center; gap: 16px; padding-block: 12px; }
+.p-btn { width: 48px; height: 48px; flex: none; border-radius: 50%; border: 0; background: var(--sun); color: #1b1600; cursor: pointer; display: grid; place-items: center; }
+.p-btn svg { width: 20px; height: 20px; }
+.p-info { min-width: 0; flex: 1; }
+.p-info small { display: block; font: 600 .7rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--sun); }
+.p-info b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p-note { font: .72rem var(--mono); opacity: .7; max-width: 22em; }
+.player .meter { flex: 0 0 120px; height: 26px; }
+@media (max-width: 860px) {
+  .hero-grid, .archive, .support { grid-template-columns: 1fr; }
+  .filters { position: static; }
+  .paths { grid-template-columns: repeat(2, 1fr); }
+  footer .cols { grid-template-columns: 1fr 1fr; }
+  .p-note, .player .meter { display: none; }
+}
+@media (max-width: 480px) {
+  body { font-size: 16px; }
+  .paths { grid-template-columns: 1fr; }
+  .amounts { grid-template-columns: repeat(2, 1fr); }
+  .ep { grid-template-columns: auto 1fr; }
+  .ep-side { grid-column: 2; justify-items: start; text-align: left; display: flex; gap: 10px; }
+  footer .cols { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="concept" role="note">
+  <div class="wrap"><span>Design concept by Kemafy for the KZFR website redesign proposal.</span><span>Sample content, not the live KZFR site.</span></div>
+</div>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="KZFR 90.1 FM home">
+      <span class="logo-mark" aria-hidden="true">KZFR</span>
+      <span class="logo-text"><b>KZFR 90.1 FM</b><span>Community Radio · Chico</span></span>
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="primaryNav">Menu</button>
+    <nav class="primary" id="primaryNav" aria-label="Primary">
+      <ul>
+        <li><a href="#schedule">Schedule</a></li>
+        <li><a href="#archive">Archive</a></li>
+        <li><a href="#events">Calendar</a></li>
+        <li><a href="#support">Get involved</a></li>
+        <li><a href="#underwriters">Underwriting</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-sun" href="#support">Donate</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">Listener-supported since July 6, 1990</p>
+          <h1>Radio made <em>by</em> the North Valley, <em>for</em> the North Valley.</h1>
+          <p class="lede">Local voices, independent news and music you won't hear anywhere else, from more than 100 volunteer programmers. Listen live, catch up on past shows, or get on the air yourself.</p>
+          <div class="actions">
+            <button class="btn btn-green" type="button" data-live>Listen live</button>
+            <a class="btn btn-ghost" href="#archive">Browse past shows</a>
+          </div>
+        </div>
+
+        <aside class="onair" id="onair" aria-label="On air now">
+          <span class="live"><span class="dot" aria-hidden="true"></span>On air now</span>
+          <div>
+            <h3 id="nowTitle">Valley Roots Hour</h3>
+            <p class="host" id="nowHost">Folk, bluegrass and Americana · hosted by Dee M.</p>
+          </div>
+          <div class="onair-row">
+            <button class="big-play" type="button" data-live aria-label="Play the live stream">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>
+            </button>
+            <div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="next"><span>Up next <b id="nextTitle">North Valley Report</b></span><span id="nextTime">at 12:00 p.m.</span></div>
+        </aside>
+      </div>
+
+      <div class="dial" aria-label="FM dial with KZFR at 90.1 megahertz" role="img">
+        <div class="dial-scale" aria-hidden="true"><span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108 MHz</span></div>
+        <div class="ticks" aria-hidden="true"></div>
+        <div class="needle" aria-hidden="true"><span>90.1 FM</span></div>
+      </div>
+      <div class="dial-note"><span>6,300 watts from Nimshew Ridge, over the Northern Sacramento Valley</span><span>Streaming worldwide at kzfr.org</span></div>
+
+      <nav class="paths" aria-label="Quick paths">
+        <a href="#archive"><b>Find a past show</b><span>Search by program, date or genre</span></a>
+        <a href="#events"><b>What's happening</b><span>The community calendar</span></a>
+        <a href="#support"><b>Volunteer or host</b><span>Train to make radio</span></a>
+        <a href="#underwriters"><b>Underwrite</b><span>Reach engaged local listeners</span></a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="band" id="schedule" aria-labelledby="schedH">
+    <div class="wrap">
+      <div class="band-head">
+        <div><p class="eyebrow">Today, Pacific time</p><h2 id="schedH">Today's schedule</h2></div>
+        <a class="more" href="#schedule">Full weekly grid</a>
+      </div>
+      <div class="sched" id="sched"></div>
+    </div>
+  </section>
+
+  <section class="band" id="archive" aria-labelledby="archH">
+    <div class="wrap">
+      <div class="band-head">
+        <div>
+          <p class="eyebrow">On-demand archive</p>
+          <h2 id="archH">Missed it? Hear it now.</h2>
+          <p>Every show stays online for two weeks. Filter by program, format or date, then press play. The player keeps going as you browse.</p>
+        </div>
+      </div>
+      <div class="archive">
+        <form class="filters" id="filters" aria-label="Filter the archive">
+          <div>
+            <label for="q">Search</label>
+            <input type="search" id="q" placeholder="Show, host or topic">
+          </div>
+          <div>
+            <label for="prog">Program</label>
+            <select id="prog"><option value="">All programs</option></select>
+          </div>
+          <fieldset>
+            <legend>Format</legend>
+            <div class="chips" id="cats"></div>
+          </fieldset>
+          <div>
+            <label for="sort">Date</label>
+            <select id="sort"><option value="new">Newest first</option><option value="old">Oldest first</option></select>
+          </div>
+        </form>
+        <div>
+          <p class="results-meta" id="meta" aria-live="polite"></p>
+          <ul class="ep-list" id="eps"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="events" aria-labelledby="evH">
+    <div class="wrap">
+      <div class="band-head">
+        <div><p class="eyebrow">Community calendar</p><h2 id="evH">Around the valley</h2><p>Free listings for nonprofit and community events in KZFR's listening area.</p></div>
+        <a class="more" href="#events">Submit an event</a>
+      </div>
+      <div class="events">
+        <article class="event"><div class="cal"><span>OCT</span><b>14</b></div><div><h3>New volunteer orientation</h3><p>KZFR studio, 341 Broadway · 6:00 p.m. Learn every way to help, from the phones to the board.</p></div></article>
+        <article class="event"><div class="cal"><span>OCT</span><b>19</b></div><div><h3>Radio production workshop</h3><p>KZFR studio · 10:00 a.m. Hands-on training for aspiring programmers. No experience needed.</p></div></article>
+        <article class="event"><div class="cal"><span>OCT</span><b>25</b></div><div><h3>Downtown harvest market</h3><p>Downtown Chico · 9:00 a.m. Local growers, live music and the KZFR table.</p></div></article>
+        <article class="event"><div class="cal"><span>NOV</span><b>02</b></div><div><h3>Fall membership drive kicks off</h3><p>On air all week · Every gift keeps independent radio on the air.</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="support" aria-labelledby="giveH">
+    <div class="wrap support">
+      <form class="give" id="giveForm">
+        <p class="eyebrow" style="color:#1b1600">Listener supported</p>
+        <h2 id="giveH">Keep community radio on the air.</h2>
+        <p>KZFR has no commercials and no corporate owner. Listeners like you pay for the transmitter, the stream and the training that puts new voices on air.</p>
+        <div class="amounts" role="group" aria-label="Gift amount">
+          <button type="button" class="amt" aria-pressed="false">$35</button>
+          <button type="button" class="amt" aria-pressed="true">$60</button>
+          <button type="button" class="amt" aria-pressed="false">$120</button>
+          <button type="button" class="amt" aria-pressed="false">$250</button>
+        </div>
+        <div class="freq" role="radiogroup" aria-label="Frequency">
+          <label><input type="radio" name="freq" id="fMonthly" value="monthly" checked> Monthly sustainer</label>
+          <label><input type="radio" name="freq" id="fOnce" value="once"> One time</label>
+        </div>
+        <button class="btn" type="submit">Continue to donate</button>
+        <p class="give-msg" id="giveMsg" aria-live="polite"></p>
+      </form>
+      <div class="side-cards">
+        <div class="side">
+          <p class="eyebrow">Volunteer</p>
+          <h3>Answer phones, staff events, or host a show</h3>
+          <p>KZFR trains members of the community to make radio. Start with an orientation, then pick your role.</p>
+          <a href="#events">See the next orientation</a>
+        </div>
+        <div class="side" id="underwriting-card">
+          <p class="eyebrow">Underwriting</p>
+          <h3>Put your business in front of loyal local listeners</h3>
+          <p>On-air credits, web listings and event sponsorships for businesses that support community radio.</p>
+          <a href="#underwriters">Underwriting rates and audience</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="underwriters" aria-labelledby="uwH">
+    <div class="wrap">
+      <div class="band-head">
+        <div><p class="eyebrow">Thank you</p><h2 id="uwH">Our underwriters</h2><p>Sample placeholders. The live site lists current underwriters with links.</p></div>
+      </div>
+      <div class="uw">
+        <div>Underwriter one</div><div>Underwriter two</div><div>Underwriter three</div><div>Underwriter four</div><div>Underwriter five</div><div>Underwriter six</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="about">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h3>KZFR 90.1 FM</h3>
+        <p>Golden Valley Community Broadcasters<br>341 Broadway, Suite 411<br>Chico, CA 95928</p>
+      </div>
+      <div><h3>Listen</h3><ul><li><a href="#top">Live stream</a></li><li><a href="#schedule">Schedule</a></li><li><a href="#archive">Archive</a></li></ul></div>
+      <div><h3>Get involved</h3><ul><li><a href="#support">Donate</a></li><li><a href="#support">Volunteer</a></li><li><a href="#underwriters">Underwrite</a></li></ul></div>
+      <div><h3>Station</h3><ul><li><a href="#about">About KZFR</a></li><li><a href="#about">Board of directors</a></li><li><a href="#about">Accessibility</a></li></ul></div>
+    </div>
+    <p class="fine">Design concept prepared by Kemafy LLC for the KZFR Website Redesign RFP. Program names, schedule and events are illustrative samples. Built to WCAG 2.1 AA.</p>
+  </div>
+</footer>
+
+<div class="player" id="player" aria-label="Audio player" role="region">
+  <div class="wrap">
+    <button class="p-btn" id="pBtn" type="button" aria-label="Play" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path id="pIcon" d="M7 4.5v15l13-7.5z"/></svg>
+    </button>
+    <div class="p-info">
+      <small id="pKind">Live · 90.1 FM</small>
+      <b id="pTitle">Valley Roots Hour</b>
+    </div>
+    <div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <p class="p-note">Concept player. In the build, audio comes from KZFR's Creek Studio stream and archive.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var PLAY = 'M7 4.5v15l13-7.5z', PAUSE = 'M6 4h4v16H6zM14 4h4v16h-4z';
+
+  // Sample schedule for today (24h start times, Pacific)
+  var schedule = [
+    { h: 6,  t: 'Morning Drive', c: 'Music · eclectic' },
+    { h: 9,  t: 'Valley Roots Hour', c: 'Folk, bluegrass, Americana' },
+    { h: 12, t: 'North Valley Report', c: 'Local news and public affairs' },
+    { h: 13, t: 'Democracy Now!', c: 'National news' },
+    { h: 14, t: 'Afternoon Jazz', c: 'Music · jazz' },
+    { h: 17, t: 'Community Voices', c: 'Talk and interviews' },
+    { h: 19, t: 'Ritmo Latino', c: 'Music · Latin' },
+    { h: 21, t: 'Night Signals', c: 'Music · electronic' }
+  ];
+  var fmt = function (h) { var ap = h < 12 ? 'a.m.' : 'p.m.'; var hh = h % 12 || 12; return hh + ':00 ' + ap; };
+  var nowH = 10;
+  try {
+    nowH = Number(new Intl.DateTimeFormat('en-US', { hour: 'numeric', hourCycle: 'h23', timeZone: 'America/Los_Angeles' }).format(new Date()));
+  } catch (e) {}
+  var cur = 0;
+  schedule.forEach(function (s, i) { if (nowH >= s.h) cur = i; });
+  if (nowH < schedule[0].h) cur = schedule.length - 1;
+
+  var sched = document.getElementById('sched');
+  schedule.forEach(function (s, i) {
+    var el = document.createElement('div');
+    el.className = 'slot' + (i === cur ? ' now' : '');
+    var end = i + 1 < schedule.length ? schedule[i + 1].h : 24;
+    el.innerHTML = '<time>' + fmt(s.h) + ' – ' + (end === 24 ? 'midnight' : fmt(end)) + '</time><h3></h3><span class="cat"></span>';
+    el.querySelector('h3').textContent = s.t;
+    el.querySelector('.cat').textContent = s.c;
+    sched.appendChild(el);
+  });
+  var nowShow = schedule[cur], nextShow = schedule[(cur + 1) % schedule.length];
+  document.getElementById('nowTitle').textContent = nowShow.t;
+  document.getElementById('nowHost').textContent = nowShow.c;
+  document.getElementById('nextTitle').textContent = nextShow.t;
+  document.getElementById('nextTime').textContent = 'at ' + fmt(nextShow.h);
+  document.getElementById('pTitle').textContent = nowShow.t;
+
+  // Sample archive
+  var eps = [
+    { p: 'North Valley Report', t: 'Water allocations and the fall rice harvest', d: '2026-10-01', c: 'News & public affairs', len: '58 min' },
+    { p: 'Valley Roots Hour', t: 'Live in studio: a Paradise string band', d: '2026-10-01', c: 'Music', len: '60 min' },
+    { p: 'Community Voices', t: 'Butte County food banks ahead of winter', d: '2026-09-30', c: 'Talk', len: '57 min' },
+    { p: 'Afternoon Jazz', t: 'Hard bop from the West Coast, 1956–1962', d: '2026-09-30', c: 'Music', len: '178 min' },
+    { p: 'Ritmo Latino', t: 'Cumbia night, with listener requests', d: '2026-09-29', c: 'Music', len: '120 min' },
+    { p: 'North Valley Report', t: 'Candidate forum: Chico City Council District 3', d: '2026-09-29', c: 'News & public affairs', len: '59 min' },
+    { p: 'Local Arts Hour', t: 'Chico poets read new work', d: '2026-09-28', c: 'Arts & culture', len: '60 min' },
+    { p: 'Night Signals', t: 'Ambient and modular, two hours deep', d: '2026-09-27', c: 'Music', len: '120 min' },
+    { p: 'Community Voices', t: 'Ten years after: rebuilding Paradise', d: '2026-09-26', c: 'Talk', len: '58 min' },
+    { p: 'Local Arts Hour', t: 'Behind the scenes at a community theater', d: '2026-09-25', c: 'Arts & culture', len: '60 min' }
+  ];
+  var cats = ['All', 'Music', 'News & public affairs', 'Talk', 'Arts & culture'];
+  var state = { q: '', p: '', c: 'All', sort: 'new', playing: null, live: true, on: false };
+
+  var progSel = document.getElementById('prog');
+  Array.from(new Set(eps.map(function (e) { return e.p; }))).sort().forEach(function (p) {
+    var o = document.createElement('option'); o.value = p; o.textContent = p; progSel.appendChild(o);
+  });
+  var catBox = document.getElementById('cats');
+  cats.forEach(function (c) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip'; b.textContent = c;
+    b.setAttribute('aria-pressed', c === state.c ? 'true' : 'false');
+    b.addEventListener('click', function () {
+      state.c = c;
+      catBox.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      render();
+    });
+    catBox.appendChild(b);
+  });
+
+  var dateFmt = function (d) {
+    var p = d.split('-'); var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Number(p[1]) - 1];
+    return m + ' ' + Number(p[2]) + ', ' + p[0];
+  };
+  var list = document.getElementById('eps'), meta = document.getElementById('meta');
+
+  function render() {
+    var q = state.q.trim().toLowerCase();
+    var rows = eps.filter(function (e) {
+      return (!state.p || e.p === state.p) && (state.c === 'All' || e.c === state.c) &&
+        (!q || (e.t + ' ' + e.p).toLowerCase().indexOf(q) > -1);
+    }).sort(function (a, b) { return state.sort === 'new' ? b.d.localeCompare(a.d) : a.d.localeCompare(b.d); });
+    meta.textContent = rows.length + (rows.length === 1 ? ' show' : ' shows');
+    list.innerHTML = '';
+    if (!rows.length) {
+      var li = document.createElement('li'); li.className = 'empty';
+      li.textContent = 'No shows match those filters. Try a different program or clear the search.';
+      list.appendChild(li); return;
+    }
+    rows.forEach(function (e) {
+      var li = document.createElement('li'); li.className = 'ep';
+      var on = state.on && !state.live && state.playing === e;
+      li.innerHTML = '<button class="ep-play" type="button"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="' + (on ? PAUSE : PLAY) + '"/></svg></button>' +
+        '<div class="ep-main"><b></b><span></span></div><div class="ep-side"><span class="tag"></span><time></time></div>';
+      var btn = li.querySelector('.ep-play');
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.setAttribute('aria-label', (on ? 'Pause ' : 'Play ') + e.t);
+      li.querySelector('b').textContent = e.t;
+      li.querySelector('.ep-main span').textContent = e.p + ' · ' + e.len;
+      li.querySelector('.tag').textContent = e.c;
+      li.querySelector('time').textContent = dateFmt(e.d);
+      li.querySelector('time').setAttribute('datetime', e.d);
+      btn.addEventListener('click', function () {
+        if (on) { setPlaying(false); } else { state.live = false; state.playing = e; setPlaying(true); }
+      });
+      list.appendChild(li);
+    });
+  }
+
+  document.getElementById('q').addEventListener('input', function (ev) { state.q = ev.target.value; render(); });
+  progSel.addEventListener('change', function (ev) { state.p = ev.target.value; render(); });
+  document.getElementById('sort').addEventListener('change', function (ev) { state.sort = ev.target.value; render(); });
+  document.getElementById('filters').addEventListener('submit', function (ev) { ev.preventDefault(); });
+
+  // Player
+  var player = document.getElementById('player'), onair = document.getElementById('onair');
+  var pBtn = document.getElementById('pBtn'), pIcon = document.getElementById('pIcon');
+  function setPlaying(on) {
+    state.on = on;
+    pIcon.setAttribute('d', on ? PAUSE : PLAY);
+    pBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    pBtn.setAttribute('aria-label', on ? 'Pause' : 'Play');
+    player.classList.toggle('playing', on);
+    onair.classList.toggle('playing', on && state.live);
+    document.getElementById('pKind').textContent = state.live ? 'Live · 90.1 FM' : 'Archive · ' + dateFmt(state.playing.d);
+    document.getElementById('pTitle').textContent = state.live ? nowShow.t : state.playing.p + ': ' + state.playing.t;
+    render();
+  }
+  pBtn.addEventListener('click', function () { setPlaying(!state.on); });
+  document.querySelectorAll('[data-live]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (state.on && state.live) { setPlaying(false); } else { state.live = true; setPlaying(true); }
+    });
+  });
+
+  // Meter bars get staggered timing
+  document.querySelectorAll('.meter i').forEach(function (i, n) {
+    i.style.animationDelay = (-(n * 137) % 900) + 'ms';
+    i.style.animationDuration = (650 + (n * 97) % 500) + 'ms';
+  });
+
+  // Donate
+  var amts = document.querySelectorAll('.amt');
+  amts.forEach(function (a) {
+    a.addEventListener('click', function () { amts.forEach(function (x) { x.setAttribute('aria-pressed', x === a ? 'true' : 'false'); }); });
+  });
+  document.getElementById('giveForm').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var a = document.querySelector('.amt[aria-pressed="true"]').textContent;
+    var monthly = document.getElementById('fMonthly').checked;
+    document.getElementById('giveMsg').textContent = 'In the live site, this opens KZFR’s secure donation page for ' + a + (monthly ? ' a month.' : '.');
+  });
+
+  // Mobile menu
+  var menuBtn = document.getElementById('menuBtn'), nav = document.getElementById('primaryNav');
+  menuBtn.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  nav.addEventListener('click', function (ev) {
+    if (ev.target.tagName === 'A') { nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
